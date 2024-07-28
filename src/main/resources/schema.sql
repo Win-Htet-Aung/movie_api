@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `movies` (
   `duration` INT NOT NULL,
   `country` VARCHAR(100),
   `imdb_rating` DECIMAL(3,1),
+  `cover` VARCHAR(255),
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
@@ -18,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `series` (
   `duration` INT NOT NULL,
   `country` VARCHAR(100),
   `imdb_rating` DECIMAL(3,1),
+  `cover` VARCHAR(255),
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
@@ -141,7 +143,8 @@ CREATE TABLE IF NOT EXISTS `ratings` (
   `value` DECIMAL(3,1),
 
   PRIMARY KEY `id`(`id`),
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  UNIQUE (`user_id`, `value`)
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `movie_rating` (
