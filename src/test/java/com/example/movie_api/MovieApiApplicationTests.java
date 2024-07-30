@@ -15,6 +15,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.example.movie_api.model.Cast;
 import com.example.movie_api.model.Genre;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -22,6 +23,14 @@ class MovieApiApplicationTests {
 
 	@Autowired
 	private TestRestTemplate restTemplate;
+
+	@Test
+	void getGenreList() {
+		ResponseEntity<Genre[]> response = restTemplate.getForEntity("/genres", Genre[].class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().length).isEqualTo(3);
+	}
 
 	@Test
 	@DirtiesContext
@@ -43,5 +52,71 @@ class MovieApiApplicationTests {
 		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 		response = restTemplate.getForEntity("/genres/1", Genre.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
+	@DirtiesContext
+	void updateGenre() {
+		Genre genre = new Genre("Documentary");
+		restTemplate.put("/genres/1", genre);
+		Genre updatedGenre = restTemplate.getForObject("/genres/1", Genre.class);
+		assertThat(updatedGenre.getName()).isEqualTo("Documentary");
+	}
+
+	@Test
+	void updatedGenreNotFound() {
+		Genre genre = new Genre("Documentary");
+		restTemplate.put("/genres/10", genre);
+		ResponseEntity<Genre> response = restTemplate.getForEntity("/genres/10", Genre.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+		assertThat(response.getBody()).isNull();
+	}
+	
+	@Test
+	@DirtiesContext
+	void createCast() {
+		Cast cast = new Cast("John Wick");
+		URI new_cast_location = restTemplate.postForLocation("/casts", cast, Void.class);
+		assertNotNull(new_cast_location);
+		ResponseEntity<Cast> response = restTemplate.getForEntity(new_cast_location, Cast.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody().getName()).isEqualTo("John Wick");
+	}
+
+	@Test
+	@DirtiesContext
+	void deleteCast() {
+		ResponseEntity<Cast> response = restTemplate.getForEntity("/casts/1", Cast.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		ResponseEntity<Void> deleteResponse = restTemplate.exchange("/casts/1", HttpMethod.DELETE, null, Void.class);
+		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+		response = restTemplate.getForEntity("/casts/1", Cast.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
+	void getCastList() {
+		ResponseEntity<Cast[]> response = restTemplate.getForEntity("/casts", Cast[].class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().length).isEqualTo(6);
+	}
+
+	@Test
+	@DirtiesContext
+	void updateCast() {
+		Cast cast = new Cast("Emma Watson");
+		restTemplate.put("/casts/1", cast);
+		Cast updatedCast = restTemplate.getForObject("/casts/1", Cast.class);
+		assertThat(updatedCast.getName()).isEqualTo("Emma Watson");
+	}
+
+	@Test
+	void updatedCastNotFound() {
+		Cast cast = new Cast("Lara Croft");
+		restTemplate.put("/casts/10", cast);
+		ResponseEntity<Cast> response = restTemplate.getForEntity("/casts/10", Cast.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+		assertThat(response.getBody()).isNull();
 	}
 }

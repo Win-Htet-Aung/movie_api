@@ -11,3 +11,13 @@ INSERT INTO `genres` (`name`) VALUES
 ('Comedy'),
 ('Drama')
 ;
+
+-- casts
+INSERT INTO `casts` (`name`) VALUES
+('John Wick'),
+('Jack Reacher'),
+('Dwayne Johnson'),
+('Tom Cruise'),
+('Denzel Washington'),
+('Tom Hanks')
+;

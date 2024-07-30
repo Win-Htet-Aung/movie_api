@@ -23,4 +23,14 @@ public class GenreService {
     public void deleteGenre(Long id) {
         genreRepository.deleteById(id);
     }
+
+    public Iterable<Genre> getGenreList() {
+        return genreRepository.findAll();
+    }
+
+    public void updateGenre(Long genreId, Genre updatedGenre) {
+        Genre genre = getGenre(genreId);
+        updatedGenre.setId(genre.getId());
+        genreRepository.save(updatedGenre);
+    }
 }

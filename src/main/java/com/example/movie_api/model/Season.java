@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 @Table(name = "seasons")
 public class Season {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
