@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.example.movie_api.model.Cast;
 import com.example.movie_api.model.Genre;
+import com.example.movie_api.model.Production;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class MovieApiApplicationTests {
@@ -118,5 +119,53 @@ class MovieApiApplicationTests {
 		ResponseEntity<Cast> response = restTemplate.getForEntity("/casts/10", Cast.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 		assertThat(response.getBody()).isNull();
+	}
+
+	@Test
+	void getProductionList() {
+		ResponseEntity<Production[]> response = restTemplate.getForEntity("/productions", Production[].class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().length).isEqualTo(6);
+	}
+
+	@Test
+	@DirtiesContext
+	void createProduction() {
+		Production production = new Production("Star Wars");
+		URI new_production_location = restTemplate.postForLocation("/productions", production, Void.class);
+		assertNotNull(new_production_location);
+		ResponseEntity<Production> response = restTemplate.getForEntity(new_production_location, Production.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody().getName()).isEqualTo("Star Wars");
+	}
+
+	@Test
+	@DirtiesContext
+	void updateProduction() {
+		Production production = new Production("Marvel Cinematic Universe");
+		restTemplate.put("/productions/1", production);
+		Production updatedProduction = restTemplate.getForObject("/productions/1", Production.class);
+		assertThat(updatedProduction.getName()).isEqualTo("Marvel Cinematic Universe");
+	}
+
+	@Test
+	void updatedProductionNotFound() {
+		Production production = new Production("20th Century Fox");
+		restTemplate.put("/productions/10", production);
+		ResponseEntity<Production> response = restTemplate.getForEntity("/productions/10", Production.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+		assertThat(response.getBody()).isNull();
+	}
+
+	@Test
+	@DirtiesContext
+	void deleteProduction() {
+		ResponseEntity<Production> response = restTemplate.getForEntity("/productions/1", Production.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		ResponseEntity<Void> deleteResponse = restTemplate.exchange("/productions/1", HttpMethod.DELETE, null, Void.class);
+		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+		response = restTemplate.getForEntity("/productions/1", Production.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 }

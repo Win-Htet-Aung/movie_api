@@ -28,4 +28,8 @@ public class CastService {
         updatedCast.setId(cast.getId());
         castRepository.save(updatedCast);
     }
+
+    public void deleteCast(Long castId) {
+        castRepository.deleteById(castId);
+    }
 }

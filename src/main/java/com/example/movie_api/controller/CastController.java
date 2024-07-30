@@ -50,11 +50,11 @@ public class CastController {
         return ResponseEntity.ok(cast);
     }
     
-    // @DeleteMapping("/casts/{castId}")
-    // public ResponseEntity<Void> deleteCast(@PathVariable Long castId) {
-    //     castService.deleteCast(castId);
-    //     return ResponseEntity.noContent().build();
-    // }
+    @DeleteMapping("/casts/{castId}")
+    public ResponseEntity<Void> deleteCast(@PathVariable Long castId) {
+        castService.deleteCast(castId);
+        return ResponseEntity.noContent().build();
+    }
     
     @PutMapping("/casts/{castId}")
     public ResponseEntity<Void> updateCast(@PathVariable Long castId, @RequestBody Cast updatedCast) {

@@ -21,3 +21,13 @@ INSERT INTO `casts` (`name`) VALUES
 ('Denzel Washington'),
 ('Tom Hanks')
 ;
+
+-- productions
+INSERT INTO `productions` (`name`) VALUES
+('Warner Bros. Pictures'),
+('20th Century Fox'),
+('Universal Pictures'),
+('Paramount Pictures'),
+('Columbia Pictures'),
+('Walt Disney Pictures')
+;
