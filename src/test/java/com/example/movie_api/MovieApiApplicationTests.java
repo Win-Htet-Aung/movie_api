@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.example.movie_api.model.Cast;
 import com.example.movie_api.model.Genre;
+import com.example.movie_api.model.Movie;
 import com.example.movie_api.model.Production;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -167,5 +168,27 @@ class MovieApiApplicationTests {
 		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 		response = restTemplate.getForEntity("/productions/1", Production.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
+	void getMovieList() {
+		ResponseEntity<Movie[]> response = restTemplate.getForEntity("/movies", Movie[].class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().length).isEqualTo(3);
+	}
+
+	@Test
+	@DirtiesContext
+	void createMovie() {
+		Movie movie = new Movie("The Matrix", "When a beautiful but troubled young woman comes to him with a dead body, Detective Fox Mulder is sent to investigate a bizarre crime.", 1999, 136, "USA", 8.7, "matrix.jpg", null, null, null, null);
+		URI new_movie_location = restTemplate.postForLocation("/movies", movie, Void.class);
+		assertNotNull(new_movie_location);
+		ResponseEntity<Movie> response = restTemplate.getForEntity(new_movie_location, Movie.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody().getTitle()).isEqualTo("The Matrix");
+		assertThat(response.getBody().getDuration()).isEqualTo(136);
+		assertThat(response.getBody().getRelease_year()).isEqualTo(1999);
+		assertThat(response.getBody().getImdb_rating()).isEqualTo(8.7);
 	}
 }
