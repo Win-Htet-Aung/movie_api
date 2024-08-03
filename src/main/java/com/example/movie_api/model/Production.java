@@ -18,11 +18,21 @@ public class Production {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "productions")
+    @ManyToMany
+    @JoinTable(
+        name = "movie_production",
+        joinColumns = @JoinColumn(name="production_id"),
+        inverseJoinColumns = @JoinColumn(name="movie_id")
+    )
     @JsonIgnoreProperties("productions")
     private Set<Movie> movies = new HashSet<Movie>();
 
-    @ManyToMany(mappedBy = "productions")
+    @ManyToMany
+    @JoinTable(
+        name = "series_production",
+        joinColumns = @JoinColumn(name="production_id"),
+        inverseJoinColumns = @JoinColumn(name="series_id")
+    )
     @JsonIgnoreProperties("productions")
     private Set<Series> series = new HashSet<Series>();
 

@@ -1,3 +1,23 @@
+DROP TABLE IF EXISTS `movie_genre`;
+DROP TABLE IF EXISTS `movie_cast`;
+DROP TABLE IF EXISTS `movie_production`;
+DROP TABLE IF EXISTS `series_cast`;
+DROP TABLE IF EXISTS `series_production`;
+DROP TABLE IF EXISTS `series_genre`;
+DROP TABLE IF EXISTS `productions`;
+DROP TABLE IF EXISTS `casts`;
+DROP TABLE IF EXISTS `genres`;
+DROP TABLE IF EXISTS `movie_rating`;
+DROP TABLE IF EXISTS `series_rating`;
+DROP TABLE IF EXISTS `season_rating`;
+DROP TABLE IF EXISTS `episode_rating`;
+DROP TABLE IF EXISTS `ratings`;
+DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `roles`;
+DROP TABLE IF EXISTS `movies`;
+DROP TABLE IF EXISTS `episodes`;
+DROP TABLE IF EXISTS `seasons`;
+DROP TABLE IF EXISTS `series`;
 
 CREATE TABLE IF NOT EXISTS `movies` (
   `id` INT NOT NULL AUTO_INCREMENT,

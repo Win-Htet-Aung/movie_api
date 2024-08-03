@@ -28,4 +28,8 @@ public class MovieService {
         updatedMovie.setId(movie.getId());
         movieRepository.save(updatedMovie);
     }
+
+    public void deleteMovie(Long movieId) {
+        movieRepository.deleteById(movieId);
+    }
 }

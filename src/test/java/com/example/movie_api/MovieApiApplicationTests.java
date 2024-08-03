@@ -1,6 +1,7 @@
 package com.example.movie_api;
 
 import java.net.URI;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -340,5 +341,50 @@ class MovieApiApplicationTests {
 		Production p2 = restTemplate.getForObject("/productions/2", Production.class);
 		assertThat(p1.getMovies().contains(response.getBody())).isTrue();
 		assertThat(p2.getMovies().contains(response.getBody())).isTrue();
+		movie = response.getBody();
+		movie.getProductions().remove(p1);
+		restTemplate.put("/movies/1", movie);
+		movie = restTemplate.getForObject("/movies/1", Movie.class);
+		assertThat(movie.getProductions().contains(p1)).isFalse();
+		assertThat(movie.getProductions().contains(p2)).isTrue();
+		p1 = restTemplate.getForObject("/productions/1", Production.class);
+		p2 = restTemplate.getForObject("/productions/2", Production.class);
+		assertThat(p1.getMovies().contains(movie)).isFalse();
+		assertThat(p2.getMovies().contains(movie)).isTrue();
+	}
+
+	@Test
+	@DirtiesContext
+	void deleteMovie() {
+		restTemplate.delete("/movies/1");
+		ResponseEntity<Movie> response = restTemplate.getForEntity("/movies/1", Movie.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
+	@DirtiesContext
+	void deleteMovieWithRelationships() {
+		Movie movie = restTemplate.getForObject("/movies/3", Movie.class);
+		Set<Genre> genres = movie.getGenres();
+		Set<Cast> casts = movie.getCasts();
+		Set<Production> productions = movie.getProductions();
+		restTemplate.delete("/movies/3");
+		ResponseEntity<Movie> response = restTemplate.getForEntity("/movies/3", Movie.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+		for (Genre genre : genres) {
+			ResponseEntity<Genre> genre_response = restTemplate.getForEntity("/genres/" + genre.getId(), Genre.class);
+			assertThat(genre_response.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(genre_response.getBody().getMovies().contains(movie)).isFalse();
+		}
+		for (Cast cast : casts) {
+			ResponseEntity<Cast> cast_response = restTemplate.getForEntity("/casts/" + cast.getId(), Cast.class);
+			assertThat(cast_response.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(cast_response.getBody().getMovies().contains(movie)).isFalse();
+		}
+		for (Production production : productions) {
+			ResponseEntity<Production> production_response = restTemplate.getForEntity("/productions/" + production.getId(), Production.class);
+			assertThat(production_response.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(production_response.getBody().getMovies().contains(movie)).isFalse();
+		}
 	}
 }
