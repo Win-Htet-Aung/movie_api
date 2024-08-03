@@ -42,6 +42,7 @@ public class Series {
         joinColumns = @JoinColumn(name="series_id"),
         inverseJoinColumns = @JoinColumn(name="rating_id")
     )
+    @JsonIgnoreProperties({"movies", "series"})
     private Set<Rating> ratings = new HashSet<Rating>();
 
     public Set<Rating> getRatings() {
@@ -88,6 +89,7 @@ public class Series {
     private Set<Production> productions = new HashSet<Production>();
 
     @OneToMany(mappedBy = "series")
+    @JsonIgnoreProperties({"series"})
     private Set<Season> seasons = new HashSet<Season>();
 
     public Set<Genre> getGenres() {
@@ -118,8 +120,7 @@ public class Series {
     }
 
     public Series(String title, String summary, Integer release_year, Integer duration, String country,
-            Double imdb_rating, String cover, Set<Rating> ratings, Set<Genre> genres, Set<Cast> casts,
-            Set<Production> productions, Set<Season> seasons) {
+            Double imdb_rating, String cover) {
         this.title = title;
         this.summary = summary;
         this.release_year = release_year;
@@ -127,11 +128,6 @@ public class Series {
         this.country = country;
         this.imdb_rating = imdb_rating;
         this.cover = cover;
-        this.ratings = ratings;
-        this.genres = genres;
-        this.casts = casts;
-        this.productions = productions;
-        this.seasons = seasons;
     }
 
     public Long getId() {
@@ -196,5 +192,42 @@ public class Series {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public void addGenre(Genre genre) {
+        this.genres.add(genre);
+    }
+
+    public void addCast(Cast cast) {
+        this.casts.add(cast);
+    }
+
+    public void addProduction(Production production) {
+        this.productions.add(production);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Series other = (Series) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
     }
 }

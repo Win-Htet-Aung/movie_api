@@ -24,7 +24,7 @@ public class Production {
         joinColumns = @JoinColumn(name="production_id"),
         inverseJoinColumns = @JoinColumn(name="movie_id")
     )
-    @JsonIgnoreProperties("productions")
+    @JsonIgnoreProperties({"casts", "ratings", "genres", "productions"})
     private Set<Movie> movies = new HashSet<Movie>();
 
     @ManyToMany
@@ -33,7 +33,7 @@ public class Production {
         joinColumns = @JoinColumn(name="production_id"),
         inverseJoinColumns = @JoinColumn(name="series_id")
     )
-    @JsonIgnoreProperties("productions")
+    @JsonIgnoreProperties({"casts", "ratings", "genres", "productions", "seasons"})
     private Set<Series> series = new HashSet<Series>();
 
     public Set<Movie> getMovies() {
