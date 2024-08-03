@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -49,6 +51,7 @@ public class Episode {
 
     @ManyToOne
     @JoinColumn(name = "season_id", nullable = false)
+    @JsonIgnoreProperties("episodes")
     private Season season;
 
     public Long getId() {
