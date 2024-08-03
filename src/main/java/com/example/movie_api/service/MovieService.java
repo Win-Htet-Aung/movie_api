@@ -22,4 +22,10 @@ public class MovieService {
     public Movie createMovie(Movie newMovie) {
         return movieRepository.save(newMovie);
     }
+
+    public void updateMovie(Long movieId, Movie updatedMovie) {
+        Movie movie = getMovie(movieId);
+        updatedMovie.setId(movie.getId());
+        movieRepository.save(updatedMovie);
+    }
 }
