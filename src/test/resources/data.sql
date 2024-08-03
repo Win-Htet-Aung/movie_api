@@ -39,20 +39,45 @@ INSERT INTO `movies` (`title`, `summary`, `release_year`, `duration`, `country`,
 ('The Big Lebowski', 'The Dude finds himself in the middle of a crooked police investigation.', 1998, 117, 'USA', 8.2, 'big_lebowski.jpg')
 ;
 
--- movie_genres
+-- movie_genre
 INSERT INTO `movie_genre` (`movie_id`, `genre_id`) VALUES
 (3, 1),
 (3, 2)
 ;
 
--- movie_casts
+-- movie_cast
 INSERT INTO `movie_cast` (`movie_id`, `cast_id`) VALUES
 (3, 1),
 (3, 2)
 ;
 
--- movie_productions
+-- movie_production
 INSERT INTO `movie_production` (`movie_id`, `production_id`) VALUES
+(3, 1),
+(3, 2)
+;
+
+-- series
+INSERT INTO `series` (`title`, `summary`, `release_year`, `duration`, `country`, `imdb_rating`, `cover`) VALUES
+('The Big Bang Theory', 'A woman and her family are stuck in the time paradox.', 2007, 22, 'USA', 9.5, 'big_bang_theory.jpg'),
+('Game of Thrones', 'Nine noble families fight for control over the mythical lands of Westeros.', 2011, 57, 'USA', 9.3, 'game_of_thrones.jpg'),
+('House of Cards', 'An antisocial maverick doctor who specializes in cardiology.', 2013, 45, 'USA', 9.1, 'house_of_cards.jpg')
+;
+
+-- series_genre
+INSERT INTO `series_genre` (`series_id`, `genre_id`) VALUES
+(3, 1),
+(3, 2)
+;
+
+-- series_cast
+INSERT INTO `series_cast` (`series_id`, `cast_id`) VALUES
+(3, 1),
+(3, 2)
+;
+
+-- series_production
+INSERT INTO `series_production` (`series_id`, `production_id`) VALUES
 (3, 1),
 (3, 2)
 ;

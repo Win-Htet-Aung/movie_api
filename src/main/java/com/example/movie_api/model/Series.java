@@ -3,6 +3,8 @@ package com.example.movie_api.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -64,6 +66,7 @@ public class Series {
         joinColumns = @JoinColumn(name="series_id"),
         inverseJoinColumns = @JoinColumn(name="genre_id")
     )
+    @JsonIgnoreProperties({"movies", "series"})
     private Set<Genre> genres = new HashSet<Genre>();
 
     @ManyToMany
@@ -72,6 +75,7 @@ public class Series {
         joinColumns = @JoinColumn(name="series_id"),
         inverseJoinColumns = @JoinColumn(name="cast_id")
     )
+    @JsonIgnoreProperties({"movies", "series"})
     private Set<Cast> casts = new HashSet<Cast>();
 
     @ManyToMany
@@ -80,6 +84,7 @@ public class Series {
         joinColumns = @JoinColumn(name="series_id"),
         inverseJoinColumns = @JoinColumn(name="production_id")
     )
+    @JsonIgnoreProperties({"movies", "series"})
     private Set<Production> productions = new HashSet<Production>();
 
     @OneToMany(mappedBy = "series")

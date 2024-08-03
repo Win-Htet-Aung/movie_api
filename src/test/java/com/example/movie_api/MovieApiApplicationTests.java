@@ -20,6 +20,7 @@ import com.example.movie_api.model.Cast;
 import com.example.movie_api.model.Genre;
 import com.example.movie_api.model.Movie;
 import com.example.movie_api.model.Production;
+import com.example.movie_api.model.Series;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class MovieApiApplicationTests {
@@ -386,5 +387,13 @@ class MovieApiApplicationTests {
 			assertThat(production_response.getStatusCode()).isEqualTo(HttpStatus.OK);
 			assertThat(production_response.getBody().getMovies().contains(movie)).isFalse();
 		}
+	}
+
+	@Test
+	void getSeriesList() {
+		ResponseEntity<Series[]> response = restTemplate.getForEntity("/series", Series[].class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().length).isEqualTo(3);
 	}
 }
