@@ -28,4 +28,21 @@ public class SeasonService {
         season.setSeries(series);
         return seasonRepository.save(season);
     }
+
+    public void updateSeason(Long seasonId, Season updatedSeason) {
+        Season season = getSeason(seasonId);
+        updatedSeason.setId(season.getId());
+        if (updatedSeason.getSeries() == null) {
+            updatedSeason.setSeries(season.getSeries());
+        }
+        seasonRepository.save(updatedSeason);
+    }
+
+    public void deleteSeason(Long id) {
+        Season season = getSeason(id);
+        Series series = season.getSeries();
+        series.getSeasons().remove(season);
+        seriesService.updateSeries(series.getId(), series);
+        seasonRepository.deleteById(id);
+    }
 }

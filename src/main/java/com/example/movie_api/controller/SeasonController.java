@@ -5,9 +5,11 @@ import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,5 +53,17 @@ public class SeasonController {
             .buildAndExpand(newSeason.getId())
             .toUri();
         return ResponseEntity.created(newSeasonLocation).build();
+    }
+
+    @PutMapping("/seasons/{seasonId}")
+    public ResponseEntity<Void> updateSeason(@PathVariable Long seasonId, @RequestBody Season season) {
+        seasonService.updateSeason(seasonId, season);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/seasons/{seasonId}")
+    public ResponseEntity<Void> deleteSeason(@PathVariable Long seasonId) {
+        seasonService.deleteSeason(seasonId);
+        return ResponseEntity.noContent().build();
     }
 }

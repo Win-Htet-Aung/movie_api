@@ -18,6 +18,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import com.example.movie_api.model.Cast;
 import com.example.movie_api.model.Genre;
 import com.example.movie_api.model.Production;
+import com.example.movie_api.model.Season;
 import com.example.movie_api.model.Series;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -137,6 +138,7 @@ class SeriesTests {
 		Set<Genre> genres = series.getGenres();
 		Set<Cast> casts = series.getCasts();
 		Set<Production> productions = series.getProductions();
+		Set<Season> seasons = series.getSeasons();
 		restTemplate.delete("/series/3");
 		ResponseEntity<Series> response = restTemplate.getForEntity("/series/3", Series.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
@@ -151,6 +153,10 @@ class SeriesTests {
 		for (Production production : productions) {
 			Production p = restTemplate.getForObject("/productions/" + production.getId(), Production.class);
 			assertThat(p.getSeries().contains(series)).isFalse();
+		}
+		for (Season season : seasons) {
+			ResponseEntity<Season> sr = restTemplate.getForEntity("/seasons/" + season.getId(), Season.class);
+			assertThat(sr.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 		}
 	}
 }
