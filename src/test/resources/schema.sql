@@ -137,6 +137,7 @@ CREATE TABLE IF NOT EXISTS `episodes` (
   `imdb_rating` DECIMAL(3,1),
 
   PRIMARY KEY `id`(`id`),
+  CONSTRAINT `U_EPISODE` UNIQUE (`season_id`, `episode_number`),
   FOREIGN KEY (`season_id`) REFERENCES `seasons` (`id`)
 ) ENGINE = InnoDB;
 
