@@ -18,13 +18,12 @@ public class Role {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties(value = {"role"}, allowSetters = true)
     private Set<User> users = new HashSet<User>();
 
-    public Role(String name, Set<User> users) {
+    public Role(String name) {
         this.name = name;
-        this.users = users;
     }
 
     public Role() {

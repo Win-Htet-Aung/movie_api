@@ -14,4 +14,22 @@ public class RoleService {
     public Iterable<Role> getRoleList() {
         return roleRepository.findAll();
     }
+
+    public Role getRole(Long id) {
+        return roleRepository.findById(id).get();
+    }
+
+    public Role createRole(Role role) {
+        return roleRepository.save(role);
+    }
+
+    public void updateRole(Long id, Role updateRole) {
+        Role role = getRole(id);
+        updateRole.setId(role.getId());
+        roleRepository.save(updateRole);
+    }
+
+    public void deleteRole(Long id) {
+        roleRepository.deleteById(id);
+    }
 }
