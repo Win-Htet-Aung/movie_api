@@ -27,12 +27,12 @@ public class Season {
     @Column(name = "imdb_rating")
     private Double imdb_rating;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "series_id", nullable = false)
     @JsonIgnoreProperties(value = {"seasons"}, allowSetters = true)
     private Series series;
 
-    @OneToMany(mappedBy = "season")
+    @OneToMany(mappedBy = "season", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties(value =  {"season"}, allowSetters = true)
     private Set<Episode> episodes = new HashSet<Episode>();
 

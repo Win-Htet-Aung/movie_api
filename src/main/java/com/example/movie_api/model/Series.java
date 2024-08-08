@@ -88,7 +88,7 @@ public class Series {
     @JsonIgnoreProperties({"movies", "series"})
     private Set<Production> productions = new HashSet<Production>();
 
-    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "series", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties(value = {"series"}, allowSetters = true)
     private Set<Season> seasons = new HashSet<Season>();
 

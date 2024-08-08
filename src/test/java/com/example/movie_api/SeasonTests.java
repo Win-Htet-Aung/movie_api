@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
+import com.example.movie_api.model.Episode;
 import com.example.movie_api.model.Season;
 import com.example.movie_api.model.Series;
 
@@ -93,5 +94,7 @@ class SeasonTests {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         Series series = restTemplate.getForObject("/series/3", Series.class);
         assertThat(series.getSeasons().size()).isEqualTo(1);
+        Episode[] episodes = restTemplate.getForObject("/episodes", Episode[].class);
+        assertThat(episodes.length).isEqualTo(0);
     }
 }
