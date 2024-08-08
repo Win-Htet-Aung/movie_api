@@ -24,8 +24,8 @@ public class ProductionController {
     private ProductionService productionService;
 
     @GetMapping("/productions")
-    public Iterable<Production> getProductionList() {
-        return productionService.getProductionList();
+    public ResponseEntity<Iterable<Production>> getProductionList() {
+        return ResponseEntity.ok(productionService.getProductionList());
     }
 
     @GetMapping("/productions/{productionId}")

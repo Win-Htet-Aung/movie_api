@@ -4,6 +4,12 @@ INSERT INTO `roles` (`name`) VALUES
 ('user')
 ;
 
+-- users
+INSERT INTO `users` (`username`, `displayname`, `email`, `password`, `role_id`) VALUES
+('admin', 'Admin', 'admin@example.com', 'admin123', 1),
+('user', 'User', 'user@example.com', 'user123', 2)
+;
+
 -- genres
 INSERT INTO `genres` (`name`) VALUES
 ('Action'),

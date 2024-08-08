@@ -88,8 +88,8 @@ class SeasonTests {
     @Test
     @DirtiesContext
     void deleteSeason() {
-        restTemplate.delete("/seasons/1");
-        ResponseEntity<Season> response = restTemplate.getForEntity("/seasons/1", Season.class);
+        restTemplate.delete("/seasons/2");
+        ResponseEntity<Season> response = restTemplate.getForEntity("/seasons/2", Season.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         Series series = restTemplate.getForObject("/series/3", Series.class);
         assertThat(series.getSeasons().size()).isEqualTo(1);

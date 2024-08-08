@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
 import com.example.movie_api.model.Cast;
+import com.example.movie_api.model.Movie;
+import com.example.movie_api.model.Series;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class CastTests {
@@ -43,6 +45,10 @@ class CastTests {
 		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 		response = restTemplate.getForEntity("/casts/1", Cast.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+		Movie[] movies = restTemplate.getForObject("/movies", Movie[].class);
+		Series[] series = restTemplate.getForObject("/series", Series[].class);
+		assertThat(movies.length).isEqualTo(3);
+		assertThat(series.length).isEqualTo(3);
 	}
 
 	@Test

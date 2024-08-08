@@ -3,6 +3,8 @@ package com.example.movie_api.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -26,6 +28,7 @@ public class User {
     private String password;
 
     @ManyToOne
+    @JsonIgnoreProperties(value = {"users"}, allowSetters = true)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 

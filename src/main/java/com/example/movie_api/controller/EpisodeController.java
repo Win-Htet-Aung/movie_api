@@ -26,8 +26,8 @@ public class EpisodeController {
     private EpisodeService episodeService;
 
     @GetMapping("/episodes")
-    public Iterable<Episode> getEpisodeList() {
-        return episodeService.getEpisodes();
+    public ResponseEntity<Iterable<Episode>> getEpisodeList() {
+        return ResponseEntity.ok(episodeService.getEpisodes());
     }
 
     @GetMapping("/episodes/{episodeId}")
