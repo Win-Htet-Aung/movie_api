@@ -1,6 +1,10 @@
 package com.example.movie_api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.movie_api.model.Movie;
@@ -11,8 +15,12 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
-    public Iterable<Movie> getMovieList() {
-        return movieRepository.findAll();
+    public Page<Movie> getMovieList(Pageable pageable) {
+        return movieRepository.findAll(PageRequest.of(
+            pageable.getPageNumber(),
+            pageable.getPageSize(),
+            pageable.getSortOr(Sort.by(Sort.Direction.DESC, "id"))
+        ));
     }
 
     public Movie getMovie(Long movieId) {

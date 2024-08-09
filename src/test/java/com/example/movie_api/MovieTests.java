@@ -32,6 +32,8 @@ class MovieTests {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().length).isEqualTo(3);
+		assertThat(response.getBody()[0].getId()).isEqualTo(3);
+		response = restTemplate.getForEntity("/movies?page=1&size=1", Movie[].class);
 	}
 
 	@Test

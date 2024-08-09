@@ -22,7 +22,7 @@ public class Movie {
     private String summary;
 
     @Column(name = "release_year")
-    private Integer release_year;
+    private Integer releaseYear;
 
     @Column(name = "duration")
     private Integer duration;
@@ -31,7 +31,7 @@ public class Movie {
     private String country;
 
     @Column(name = "imdb_rating")
-    private Double imdb_rating;
+    private Double imdbRating;
 
     @Column(name = "cover")
     private String cover;
@@ -111,10 +111,10 @@ public class Movie {
             Double imdb_rating, String cover) {
         this.title = title;
         this.summary = summary;
-        this.release_year = release_year;
+        this.releaseYear = release_year;
         this.duration = duration;
         this.country = country;
-        this.imdb_rating = imdb_rating;
+        this.imdbRating = imdb_rating;
         this.cover = cover;
     }
 
@@ -143,11 +143,11 @@ public class Movie {
     }
 
     public Integer getRelease_year() {
-        return release_year;
+        return releaseYear;
     }
 
     public void setRelease_year(Integer release_year) {
-        this.release_year = release_year;
+        this.releaseYear = release_year;
     }
 
     public Integer getDuration() {
@@ -167,11 +167,11 @@ public class Movie {
     }
 
     public Double getImdb_rating() {
-        return imdb_rating;
+        return imdbRating;
     }
 
     public void setImdb_rating(Double imdb_rating) {
-        this.imdb_rating = imdb_rating;
+        this.imdbRating = imdb_rating;
     }
 
     public String getCover() {

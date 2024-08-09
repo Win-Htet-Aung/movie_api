@@ -41,8 +41,9 @@ INSERT INTO `productions` (`name`) VALUES
 -- movies
 INSERT INTO `movies` (`title`, `summary`, `release_year`, `duration`, `country`, `imdb_rating`, `cover`) VALUES
 ('The Godfather', 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.', 1972, 175, 'USA', 9.2, 'godfather.jpg'),
-('The Shawshank Redemption', 'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.', 1994, 142, 'USA', 9.3, 'shawshank.jpg'),
-('The Big Lebowski', 'The Dude finds himself in the middle of a crooked police investigation.', 1998, 117, 'USA', 8.2, 'big_lebowski.jpg')
+('The Shawshank Redemption', 'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.', 1994, 175, 'USA', 9.3, 'shawshank.jpg'),
+('The Big Lebowski', 'The Dude finds himself in the middle of a crooked police investigation.', 1998, 117, 'USA', 8.2, 'big_lebowski.jpg'),
+('Big Hero 6', 'The special bond that develops between plus-sized inflatable robot Baymax, and prodigy Hiro Hamada, who team up with mad scientists.', 2014, 102, 'Japan', 7.8, 'big_hero.jpg')
 ;
 
 -- movie_genre

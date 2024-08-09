@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +25,9 @@ public class MovieController {
     private MovieService movieService;
 
     @GetMapping("/movies")
-    public ResponseEntity<Iterable<Movie>> getMovieList() {
-        return ResponseEntity.ok(movieService.getMovieList());
+    public ResponseEntity<Page<Movie>> getMovieList(Pageable pageable) {
+        Page<Movie> page = movieService.getMovieList(pageable);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/movies/{movieId}")
