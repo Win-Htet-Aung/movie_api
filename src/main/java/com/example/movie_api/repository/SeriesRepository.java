@@ -7,5 +7,5 @@ import com.example.movie_api.model.Series;
 
 @Repository
 public interface SeriesRepository extends CrudRepository<Series, Long> {
-    
+    Iterable<Series> findByTitleContaining(String title);
 }
