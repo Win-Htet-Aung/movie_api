@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
@@ -19,6 +21,7 @@ import com.example.movie_api.model.Cast;
 import com.example.movie_api.model.Genre;
 import com.example.movie_api.model.Movie;
 import com.example.movie_api.model.Production;
+import com.example.movie_api.utils.CustomPageImpl;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class MovieTests {
@@ -28,12 +31,12 @@ class MovieTests {
 
     @Test
 	void getMovieList() {
-		ResponseEntity<Movie[]> response = restTemplate.getForEntity("/movies", Movie[].class);
+		ResponseEntity<CustomPageImpl<Movie>> response = restTemplate.exchange("/movies?page=1&size=2&sort=imdbRating,desc", HttpMethod.GET, null, new ParameterizedTypeReference<CustomPageImpl<Movie>>() {});
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isNotNull();
-		assertThat(response.getBody().length).isEqualTo(3);
-		assertThat(response.getBody()[0].getId()).isEqualTo(3);
-		response = restTemplate.getForEntity("/movies?page=1&size=1", Movie[].class);
+		assertThat(response.getBody().getContent().size()).isEqualTo(2);
+		assertThat(response.getBody().getTotalPages()).isEqualTo(2);
+		assertThat(response.getBody().getContent().get(0).getImdb_rating()).isEqualTo(9.3);
 	}
 
 	@Test

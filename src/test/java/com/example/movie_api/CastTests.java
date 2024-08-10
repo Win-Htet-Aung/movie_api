@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import com.example.movie_api.model.Cast;
 import com.example.movie_api.model.Movie;
 import com.example.movie_api.model.Series;
+import com.example.movie_api.utils.CustomPageImpl;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class CastTests {
@@ -45,9 +47,12 @@ class CastTests {
 		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 		response = restTemplate.getForEntity("/casts/1", Cast.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-		Movie[] movies = restTemplate.getForObject("/movies", Movie[].class);
+		Movie[] movies = restTemplate.exchange(
+			"/movies?page=1&size=10", HttpMethod.GET, null,
+			new ParameterizedTypeReference<CustomPageImpl<Movie>>() {}
+		).getBody().getContent().toArray(new Movie[0]);
 		Series[] series = restTemplate.getForObject("/series", Series[].class);
-		assertThat(movies.length).isEqualTo(3);
+		assertThat(movies.length).isEqualTo(4);
 		assertThat(series.length).isEqualTo(3);
 	}
 
