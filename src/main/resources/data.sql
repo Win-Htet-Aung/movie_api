@@ -48,8 +48,13 @@ INSERT INTO `movies` (`title`, `summary`, `release_year`, `duration`, `country`,
 
 -- movie_genre
 INSERT INTO `movie_genre` (`movie_id`, `genre_id`) VALUES
+(1, 3),
+(1, 4),
+(2, 2),
+(2, 3),
 (3, 1),
-(3, 2)
+(3, 2),
+(4, 1)
 ;
 
 -- movie_cast

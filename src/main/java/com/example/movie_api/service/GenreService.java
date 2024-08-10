@@ -20,6 +20,14 @@ public class GenreService {
         return genreRepository.findById(id).get();
     }
 
+    public Genre getGenreByName(String name) {
+        return genreRepository.findByName(name);
+    }
+
+    public Iterable<Genre> getGenreByNames(String[] names) {
+        return genreRepository.findByNameInIterable(names);
+    }
+
     public void deleteGenre(Long id) {
         genreRepository.deleteById(id);
     }

@@ -31,7 +31,7 @@ class MovieTests {
 
     @Test
 	void getMovieList() {
-		ResponseEntity<CustomPageImpl<Movie>> response = restTemplate.exchange("/movies?page=1&size=2&sort=imdbRating,desc", HttpMethod.GET, null, new ParameterizedTypeReference<CustomPageImpl<Movie>>() {});
+		ResponseEntity<CustomPageImpl<Movie>> response = restTemplate.exchange("/movies?page=1&size=2&sort=imdbRating,desc", HttpMethod.GET, null, new ParameterizedTypeReference<CustomPageImpl<Movie>>(){});
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().getContent().size()).isEqualTo(2);

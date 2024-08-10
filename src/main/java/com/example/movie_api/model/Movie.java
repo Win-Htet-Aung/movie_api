@@ -1,6 +1,8 @@
 package com.example.movie_api.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -217,5 +219,13 @@ public class Movie {
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+
+    public List<String> getGenreNames() {
+        List<String> genreNames = new ArrayList<String>();
+        for (Genre genre : genres) {
+            genreNames.add(genre.getName());
+        }
+        return genreNames;
     }
 }
