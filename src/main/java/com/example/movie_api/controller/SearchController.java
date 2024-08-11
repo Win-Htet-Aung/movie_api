@@ -17,7 +17,6 @@ public class SearchController {
 
     @GetMapping("/search")
     public Page<MovieSeries> getSearchPage(SearchCriteria searchCriteria, Pageable pageable) {
-        System.out.println("imdbRating => " + searchCriteria.getImdbRating());
         return searchService.getSearchPage(searchCriteria, pageable);
     }
 }
