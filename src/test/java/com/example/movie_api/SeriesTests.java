@@ -45,7 +45,7 @@ class SeriesTests {
 		assertThat(response.getBody().getTitle()).isEqualTo(series.getTitle());
 		assertThat(response.getBody().getRelease_year()).isEqualTo(series.getRelease_year());
 		assertThat(response.getBody().getCountry()).isEqualTo(series.getCountry());
-		assertThat(response.getBody().getImdb_rating()).isEqualTo(series.getImdb_rating());
+		assertThat(response.getBody().getImdbRating()).isEqualTo(series.getImdbRating());
 	}
 
 	@Test
@@ -88,7 +88,7 @@ class SeriesTests {
 		assertThat(updatedSeries.getTitle()).isEqualTo(series.getTitle());
 		assertThat(updatedSeries.getRelease_year()).isEqualTo(series.getRelease_year());
 		assertThat(updatedSeries.getCountry()).isEqualTo(series.getCountry());
-		assertThat(updatedSeries.getImdb_rating()).isEqualTo(series.getImdb_rating());
+		assertThat(updatedSeries.getImdbRating()).isEqualTo(series.getImdbRating());
 	}
 
 	@Test

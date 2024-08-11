@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "genres")
+@JsonIgnoreProperties({"movies", "series"})
 public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

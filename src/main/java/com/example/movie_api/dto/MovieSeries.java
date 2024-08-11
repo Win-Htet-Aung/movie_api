@@ -94,5 +94,5 @@ public class MovieSeries {
 
     public void setType(String type) {
         this.type = type;
-    }    
+    }
 }

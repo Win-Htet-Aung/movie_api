@@ -37,7 +37,7 @@ public class SearchService {
         for (Series s : series) {
             movies_series.add(new MovieSeries(
                 s.getId(), s.getTitle(), s.getSummary(), s.getRelease_year(),
-                s.getDuration(), s.getCountry(), s.getImdb_rating(), s.getCover(),
+                s.getDuration(), s.getCountry(), s.getImdbRating(), s.getCover(),
                 "series"
             ));
         }
