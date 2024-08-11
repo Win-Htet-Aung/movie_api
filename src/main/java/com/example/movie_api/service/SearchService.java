@@ -12,22 +12,20 @@ import org.springframework.stereotype.Service;
 import com.example.movie_api.dto.MovieSeries;
 import com.example.movie_api.model.Movie;
 import com.example.movie_api.model.Series;
-import com.example.movie_api.repository.MovieRepository;
-import com.example.movie_api.repository.SeriesRepository;
+import com.example.movie_api.utils.SearchCriteria;
 
 @Service
 public class SearchService {
     @Autowired
-    private MovieRepository movieRepository;
+    private MovieService moviceService;
     
     @Autowired
-    private SeriesRepository seriesRepository;
+    private SeriesService seriesService;
 
-    public Page<MovieSeries> getSearchPage(String query, Pageable pageable) {
-        Iterable<Movie> movies = movieRepository.findByTitleContaining(query);
-        Iterable<Series> series = seriesRepository.findByTitleContaining(query);
+    public Page<MovieSeries> getSearchPage(SearchCriteria searchCriteria, Pageable pageable) {
+        Iterable<Movie> movies = moviceService.searchMovies(searchCriteria);
+        Iterable<Series> series = seriesService.searchSeries(searchCriteria);
         List<MovieSeries> movies_series = new ArrayList<>();
-
         for (Movie movie : movies) {
             movies_series.add(new MovieSeries(
                 movie.getId(), movie.getTitle(), movie.getSummary(), movie.getRelease_year(),
