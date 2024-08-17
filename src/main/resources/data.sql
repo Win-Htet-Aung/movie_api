@@ -6,8 +6,8 @@ INSERT INTO `roles` (`name`) VALUES
 
 -- users
 INSERT INTO `users` (`username`, `displayname`, `email`, `password`, `role_id`) VALUES
-('admin', 'Admin', 'admin@example.com', 'admin123', 1),
-('user', 'User', 'user@example.com', 'user123', 2)
+('admin', 'Admin', 'admin@example.com', '{bcrypt}$2a$10$ot2t6kCvGvaqLqUaysfble3m2jiRwoElVH5BHH37foRqouhRAHHsu', 1),
+('user', 'User', 'user@example.com', '{bcrypt}$2a$10$PM25pPgcMP40kwHVFsu.Quo4mTEUbSihA4ItljWKF3/WqrqNuXPAi', 2)
 ;
 
 -- genres

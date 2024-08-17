@@ -1,6 +1,7 @@
 package com.example.movie_api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.movie_api.model.Role;
@@ -25,7 +26,8 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        user.setPassword("HashedPassword" + user.getPassword());
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+        user.setPassword("{bcrypt}" + encoder.encode(user.getPassword()));
         Role role = roleRepository.findByName("user");
         user.setRole(role);
         return userRepository.save(user);

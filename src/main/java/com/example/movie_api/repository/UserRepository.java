@@ -7,5 +7,5 @@ import com.example.movie_api.model.User;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
-    
+    User findByUsername(String username);
 }
