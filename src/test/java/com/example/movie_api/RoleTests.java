@@ -3,6 +3,7 @@ package com.example.movie_api;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URI;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
 import com.example.movie_api.model.Role;
+import com.example.movie_api.model.User;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class RoleTests {
@@ -55,8 +57,14 @@ public class RoleTests {
     @Test
     @DirtiesContext
     public void deleteRole() {
+        Role role = restTemplate.getForObject("/roles/1", Role.class);
+        Set<User> users = role.getUsers();
         restTemplate.delete("/roles/1");
         ResponseEntity<Role> response = restTemplate.getForEntity("/roles/1", Role.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        for (User user : users) {
+            ResponseEntity<User> uResp = restTemplate.getForEntity("/users/" + user.getId(), User.class);
+            assertThat(uResp.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        }
     }
 }

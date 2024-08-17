@@ -33,23 +33,21 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    private Set<Rating> ratings = new HashSet<Rating>();
+    private Set<Review> reviews = new HashSet<Review>();
 
-    public Set<Rating> getRatings() {
-        return ratings;
+    public Set<Review> getReviews() {
+        return reviews;
     }
 
-    public void setRatings(Set<Rating> ratings) {
-        this.ratings = ratings;
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
     }
 
-    public User(String username, String displayname, String email, String password, Role role, Set<Rating> ratings) {
+    public User(String username, String displayname, String email, String password) {
         this.username = username;
         this.displayname = displayname;
         this.email = email;
         this.password = password;
-        this.role = role;
-        this.ratings = ratings;
     }
 
     public User() {

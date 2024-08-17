@@ -34,8 +34,8 @@ public class EpisodeService {
         if (episode.getSeason() == null) {
             episode.setSeason(oldEpisode.getSeason());
         }
-        if (episode.getRatings() == null) {
-            episode.setRatings(oldEpisode.getRatings());
+        if (episode.getReviews() == null) {
+            episode.setReviews(oldEpisode.getReviews());
         }
         episode.setId(oldEpisode.getId());
         episodeRepository.save(episode);

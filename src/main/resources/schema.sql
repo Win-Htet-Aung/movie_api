@@ -7,11 +7,11 @@ DROP TABLE IF EXISTS `series_genre`;
 DROP TABLE IF EXISTS `productions`;
 DROP TABLE IF EXISTS `casts`;
 DROP TABLE IF EXISTS `genres`;
-DROP TABLE IF EXISTS `movie_rating`;
-DROP TABLE IF EXISTS `series_rating`;
-DROP TABLE IF EXISTS `season_rating`;
-DROP TABLE IF EXISTS `episode_rating`;
-DROP TABLE IF EXISTS `ratings`;
+DROP TABLE IF EXISTS `movie_review`;
+DROP TABLE IF EXISTS `series_review`;
+DROP TABLE IF EXISTS `season_review`;
+DROP TABLE IF EXISTS `episode_review`;
+DROP TABLE IF EXISTS `reviews`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `roles`;
 DROP TABLE IF EXISTS `movies`;
@@ -159,48 +159,48 @@ CREATE TABLE IF NOT EXISTS `users` (
   FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `ratings` (
+CREATE TABLE IF NOT EXISTS `reviews` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
-  `value` DECIMAL(3,1),
+  `comment` TEXT,
+  `rating` DECIMAL(3,1),
 
   PRIMARY KEY `id`(`id`),
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  UNIQUE (`user_id`, `value`)
+  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `movie_rating` (
+CREATE TABLE IF NOT EXISTS `movie_review` (
   `movie_id` INT NOT NULL,
-  `rating_id` INT NOT NULL,
+  `review_id` INT NOT NULL,
 
-  PRIMARY KEY (`movie_id`, `rating_id`),
+  PRIMARY KEY (`movie_id`, `review_id`),
   FOREIGN KEY (`movie_id`) REFERENCES `movies` (`id`),
-  FOREIGN KEY (`rating_id`) REFERENCES `ratings` (`id`)
+  FOREIGN KEY (`review_id`) REFERENCES `reviews` (`id`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `series_rating` (
+CREATE TABLE IF NOT EXISTS `series_review` (
   `series_id` INT NOT NULL,
-  `rating_id` INT NOT NULL,
+  `review_id` INT NOT NULL,
 
-  PRIMARY KEY (`series_id`, `rating_id`),
+  PRIMARY KEY (`series_id`, `review_id`),
   FOREIGN KEY (`series_id`) REFERENCES `series` (`id`),
-  FOREIGN KEY (`rating_id`) REFERENCES `ratings` (`id`)
+  FOREIGN KEY (`review_id`) REFERENCES `reviews` (`id`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `season_rating` (
+CREATE TABLE IF NOT EXISTS `season_review` (
   `season_id` INT NOT NULL,
-  `rating_id` INT NOT NULL,
+  `review_id` INT NOT NULL,
 
-  PRIMARY KEY (`season_id`, `rating_id`),
+  PRIMARY KEY (`season_id`, `review_id`),
   FOREIGN KEY (`season_id`) REFERENCES `seasons` (`id`),
-  FOREIGN KEY (`rating_id`) REFERENCES `ratings` (`id`)
+  FOREIGN KEY (`review_id`) REFERENCES `reviews` (`id`)
 ) ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `episode_rating` (
+CREATE TABLE IF NOT EXISTS `episode_review` (
   `episode_id` INT NOT NULL,
-  `rating_id` INT NOT NULL,
+  `review_id` INT NOT NULL,
 
-  PRIMARY KEY (`episode_id`, `rating_id`),
+  PRIMARY KEY (`episode_id`, `review_id`),
   FOREIGN KEY (`episode_id`) REFERENCES `episodes` (`id`),
-  FOREIGN KEY (`rating_id`) REFERENCES `ratings` (`id`)
+  FOREIGN KEY (`review_id`) REFERENCES `reviews` (`id`)
 ) ENGINE = InnoDB;

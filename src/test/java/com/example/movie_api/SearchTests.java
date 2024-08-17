@@ -27,7 +27,6 @@ public class SearchTests {
             new ParameterizedTypeReference<CustomPageImpl<MovieSeries>>() {}
         );
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getContent()).isNotNull();
         assertThat(response.getBody().getContent().size()).isEqualTo(7);
     }
 }

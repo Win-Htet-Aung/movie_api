@@ -38,11 +38,11 @@ public class Season {
 
     @ManyToMany
     @JoinTable(
-        name = "season_rating",
+        name = "season_review",
         joinColumns = @JoinColumn(name="season_id"),
-        inverseJoinColumns = @JoinColumn(name="rating_id")
+        inverseJoinColumns = @JoinColumn(name="review_id")
     )
-    private Set<Rating> ratings = new HashSet<Rating>();
+    private Set<Review> reviews = new HashSet<Review>();
 
     public Season(Integer season_number, String summary, Integer release_year, Double imdb_rating) {
         this.season_number = season_number;
@@ -110,12 +110,12 @@ public class Season {
         this.episodes = episodes;
     }
 
-    public Set<Rating> getRatings() {
-        return ratings;
+    public Set<Review> getReviews() {
+        return reviews;
     }
 
-    public void setRatings(Set<Rating> ratings) {
-        this.ratings = ratings;
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
     }
 
     @Override

@@ -6,30 +6,33 @@ import java.util.Set;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "ratings")
-public class Rating {
+@Table(name = "reviews")
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "value")
-    private Double value;
+    @Column(name = "comment")
+    private String comment;
+
+    @Column(name = "rating")
+    private Double rating;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToMany(mappedBy = "ratings")
+    @ManyToMany(mappedBy = "reviews")
     private Set<Movie> movies = new HashSet<Movie>();
 
-    @ManyToMany(mappedBy = "ratings")
+    @ManyToMany(mappedBy = "reviews")
     private Set<Series> series = new HashSet<Series>();
 
-    @ManyToMany(mappedBy = "ratings")
+    @ManyToMany(mappedBy = "reviews")
     private Set<Season> seasons = new HashSet<Season>();
 
-    @ManyToMany(mappedBy = "ratings")
+    @ManyToMany(mappedBy = "reviews")
     private Set<Episode> episodes = new HashSet<Episode>();
 
     public Set<Movie> getMovies() {
@@ -64,12 +67,12 @@ public class Rating {
         this.episodes = episodes;
     }
 
-    public Rating() {
+    public Review() {
     }
 
-    public Rating(Double value, User user, Set<Movie> movies, Set<Series> series, Set<Season> seasons,
+    public Review(Double rating, User user, Set<Movie> movies, Set<Series> series, Set<Season> seasons,
             Set<Episode> episodes) {
-        this.value = value;
+        this.rating = rating;
         this.user = user;
         this.movies = movies;
         this.series = series;
@@ -85,12 +88,12 @@ public class Rating {
         this.id = id;
     }
 
-    public Double getValue() {
-        return value;
+    public Double getRating() {
+        return rating;
     }
 
-    public void setValue(Double value) {
-        this.value = value;
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     public User getUser() {
@@ -99,5 +102,13 @@ public class Rating {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

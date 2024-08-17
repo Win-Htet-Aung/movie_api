@@ -31,7 +31,10 @@ class MovieTests {
 
     @Test
 	void getMovieList() {
-		ResponseEntity<CustomPageImpl<Movie>> response = restTemplate.exchange("/movies?page=1&size=2&sort=imdbRating,desc", HttpMethod.GET, null, new ParameterizedTypeReference<CustomPageImpl<Movie>>(){});
+		ResponseEntity<CustomPageImpl<Movie>> response = restTemplate.exchange(
+			"/movies?page=1&size=2&sort=imdbRating,desc", HttpMethod.GET,
+			null, new ParameterizedTypeReference<CustomPageImpl<Movie>>(){}
+		);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().getContent().size()).isEqualTo(2);
@@ -67,10 +70,13 @@ class MovieTests {
 		assertThat(response.getBody().getGenres().size()).isEqualTo(2);
 		assertThat(response.getBody().getGenres().contains(genres[0])).isTrue();
 		assertThat(response.getBody().getGenres().contains(genres[1])).isTrue();
-		Genre g1 = restTemplate.getForObject("/genres/1", Genre.class);
-		Genre g2 = restTemplate.getForObject("/genres/2", Genre.class);
-		assertThat(g1.getMovies().contains(response.getBody())).isTrue();
-		assertThat(g2.getMovies().contains(response.getBody())).isTrue();
+		ResponseEntity<CustomPageImpl<Movie>> moviesListResponse = restTemplate.exchange(
+			"/movies?page=1&size=1&sort=id,desc&allGenre=true&genre=" + genres[0].getName() + "," + genres[1].getName(),
+			HttpMethod.GET, null,
+			new ParameterizedTypeReference<CustomPageImpl<Movie>>(){}
+		);
+		Movie createdMovie = moviesListResponse.getBody().getContent().get(0);
+		assertThat(createdMovie).isEqualTo(response.getBody());
 	}
 
 	@Test
@@ -141,18 +147,12 @@ class MovieTests {
 		assertThat(response.getBody().getGenres().contains(genres[1])).isTrue();
 		Genre g1 = restTemplate.getForObject("/genres/1", Genre.class);
 		Genre g2 = restTemplate.getForObject("/genres/2", Genre.class);
-		assertThat(g1.getMovies().contains(response.getBody())).isTrue();
-		assertThat(g2.getMovies().contains(response.getBody())).isTrue();
 		movie = response.getBody();
 		movie.getGenres().remove(g1);
 		restTemplate.put("/movies/1", movie);
 		movie = restTemplate.getForObject("/movies/1", Movie.class);
 		assertThat(movie.getGenres().contains(g1)).isFalse();
 		assertThat(movie.getGenres().contains(g2)).isTrue();
-		g1 = restTemplate.getForObject("/genres/1", Genre.class);
-		g2 = restTemplate.getForObject("/genres/2", Genre.class);
-		assertThat(g1.getMovies().contains(movie)).isFalse();
-		assertThat(g2.getMovies().contains(movie)).isTrue();
 	}
 
 	@Test

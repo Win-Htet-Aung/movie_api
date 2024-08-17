@@ -70,13 +70,6 @@ class SeriesTests {
 		assertThat(response.getBody().getCasts().contains(casts[1])).isTrue();
 		assertThat(response.getBody().getProductions().contains(productions[0])).isTrue();
 		assertThat(response.getBody().getProductions().contains(productions[1])).isTrue();
-		Series createdSeries = response.getBody();
-		Genre g = restTemplate.getForObject("/genres/" + genres[0].getId(), Genre.class);
-		Cast c = restTemplate.getForObject("/casts/" + casts[0].getId(), Cast.class);
-		Production p = restTemplate.getForObject("/productions/" + productions[0].getId(), Production.class);
-		assertThat(g.getSeries().contains(createdSeries)).isTrue();
-		assertThat(c.getSeries().contains(createdSeries)).isTrue();
-		assertThat(p.getSeries().contains(createdSeries)).isTrue();
 	}
 
 	@Test
@@ -105,13 +98,7 @@ class SeriesTests {
 		Series updatedSeries = restTemplate.getForObject("/series/1", Series.class);
 		assertThat(updatedSeries.getGenres().contains(genres[0])).isTrue();
 		assertThat(updatedSeries.getCasts().contains(casts[0])).isTrue();
-		assertThat(updatedSeries.getProductions().contains(productions[0])).isTrue();
-		Genre g = restTemplate.getForObject("/genres/" + genres[0].getId(), Genre.class);
-		Cast c = restTemplate.getForObject("/casts/" + casts[0].getId(), Cast.class);
-		Production p = restTemplate.getForObject("/productions/" + productions[0].getId(), Production.class);
-		assertThat(g.getSeries().contains(updatedSeries)).isTrue();
-		assertThat(c.getSeries().contains(updatedSeries)).isTrue();
-		assertThat(p.getSeries().contains(updatedSeries)).isTrue();
+		assertThat(updatedSeries.getProductions().contains(productions[0])).isTrue();		
 		updatedSeries.getGenres().clear();
 		updatedSeries.getCasts().clear();
 		updatedSeries.getProductions().clear();

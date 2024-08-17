@@ -85,6 +85,9 @@ public class SearchCriteria {
     }
 
     public <T> Predicate getImdbRatingPredicate(CriteriaBuilder cb, Root<T> root) {
+        if (imdbRating == null) {
+            return cb.and();
+        }
         Double value = Double.parseDouble(imdbRating[0]);
         String operator = imdbRating[1];
         if (operator.equals("ge")) {

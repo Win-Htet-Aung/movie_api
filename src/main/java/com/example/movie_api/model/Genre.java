@@ -25,7 +25,7 @@ public class Genre {
         joinColumns = @JoinColumn(name="genre_id"),
         inverseJoinColumns = @JoinColumn(name="movie_id")
     )
-    @JsonIgnoreProperties({"casts", "ratings", "genres", "productions"})
+    @JsonIgnoreProperties({"casts", "reviews", "genres", "productions"})
     private Set<Movie> movies = new HashSet<Movie>();
 
     @ManyToMany
@@ -34,7 +34,7 @@ public class Genre {
         joinColumns = @JoinColumn(name="genre_id"),
         inverseJoinColumns = @JoinColumn(name="series_id")
     )
-    @JsonIgnoreProperties({"casts", "ratings", "genres", "productions", "seasons"})
+    @JsonIgnoreProperties({"casts", "reviews", "genres", "productions", "seasons"})
     private Set<Series> series = new HashSet<Series>();
 
     public Set<Movie> getMovies() {

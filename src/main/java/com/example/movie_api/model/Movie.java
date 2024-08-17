@@ -67,19 +67,19 @@ public class Movie {
 
     @ManyToMany
     @JoinTable(
-        name = "movie_rating",
+        name = "movie_review",
         joinColumns = @JoinColumn(name="movie_id"),
-        inverseJoinColumns = @JoinColumn(name="rating_id")
+        inverseJoinColumns = @JoinColumn(name="review_id")
     )
     @JsonIgnoreProperties({"movies", "series"})
-    private Set<Rating> ratings = new HashSet<Rating>();
+    private Set<Review> reviews = new HashSet<Review>();
 
-    public Set<Rating> getRatings() {
-        return ratings;
+    public Set<Review> getReviews() {
+        return reviews;
     }
 
-    public void setRatings(Set<Rating> ratings) {
-        this.ratings = ratings;
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
     }
 
     public Set<Genre> getGenres() {
