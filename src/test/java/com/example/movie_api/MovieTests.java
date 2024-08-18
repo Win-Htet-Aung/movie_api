@@ -34,7 +34,7 @@ class MovieTests extends MovieApiApplicationTests {
 		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().getContent().size()).isEqualTo(2);
 		assertThat(response.getBody().getTotalPages()).isEqualTo(2);
-		assertThat(response.getBody().getContent().get(0).getImdb_rating()).isEqualTo(9.3);
+		assertThat(response.getBody().getContent().get(0).getImdbRating()).isEqualTo(9.3);
 	}
 
 	@Test
@@ -47,8 +47,8 @@ class MovieTests extends MovieApiApplicationTests {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getTitle()).isEqualTo("The Matrix");
 		assertThat(response.getBody().getDuration()).isEqualTo(136);
-		assertThat(response.getBody().getRelease_year()).isEqualTo(1999);
-		assertThat(response.getBody().getImdb_rating()).isEqualTo(8.7);
+		assertThat(response.getBody().getReleaseYear()).isEqualTo(1999);
+		assertThat(response.getBody().getImdbRating()).isEqualTo(8.7);
 	}
 
 	@Test
@@ -123,8 +123,8 @@ class MovieTests extends MovieApiApplicationTests {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getTitle()).isEqualTo("The Matrix");
 		assertThat(response.getBody().getDuration()).isEqualTo(136);
-		assertThat(response.getBody().getRelease_year()).isEqualTo(1999);
-		assertThat(response.getBody().getImdb_rating()).isEqualTo(8.7);
+		assertThat(response.getBody().getReleaseYear()).isEqualTo(1999);
+		assertThat(response.getBody().getImdbRating()).isEqualTo(8.7);
 	}
 
 	@Test

@@ -3,10 +3,13 @@ package com.example.movie_api.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "reviews")
+@JsonIgnoreProperties({"movies", "series", "seasons", "episodes"})
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,19 +23,24 @@ public class Review {
     private Double rating;
 
     @ManyToOne
+    @JsonIgnoreProperties(value = {"reviews"}, allowSetters = true)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToMany(mappedBy = "reviews")
+    @JsonIgnoreProperties("reviews")
     private Set<Movie> movies = new HashSet<Movie>();
 
     @ManyToMany(mappedBy = "reviews")
+    @JsonIgnoreProperties("reviews")
     private Set<Series> series = new HashSet<Series>();
 
     @ManyToMany(mappedBy = "reviews")
+    @JsonIgnoreProperties("reviews")
     private Set<Season> seasons = new HashSet<Season>();
 
     @ManyToMany(mappedBy = "reviews")
+    @JsonIgnoreProperties("reviews")
     private Set<Episode> episodes = new HashSet<Episode>();
 
     public Set<Movie> getMovies() {
@@ -70,14 +78,9 @@ public class Review {
     public Review() {
     }
 
-    public Review(Double rating, User user, Set<Movie> movies, Set<Series> series, Set<Season> seasons,
-            Set<Episode> episodes) {
+    public Review(Double rating, String comment) {
         this.rating = rating;
-        this.user = user;
-        this.movies = movies;
-        this.series = series;
-        this.seasons = seasons;
-        this.episodes = episodes;
+        this.comment = comment;
     }
 
     public Long getId() {

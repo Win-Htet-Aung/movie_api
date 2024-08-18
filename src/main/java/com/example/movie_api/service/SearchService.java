@@ -28,15 +28,15 @@ public class SearchService {
         List<MovieSeries> movies_series = new ArrayList<>();
         for (Movie movie : movies) {
             movies_series.add(new MovieSeries(
-                movie.getId(), movie.getTitle(), movie.getSummary(), movie.getRelease_year(),
-                movie.getDuration(), movie.getCountry(), movie.getImdb_rating(), movie.getCover(),
+                movie.getId(), movie.getTitle(), movie.getSummary(), movie.getReleaseYear(),
+                movie.getDuration(), movie.getCountry(), movie.getImdbRating(), movie.getCover(),
                 "movie"
             ));
         }
 
         for (Series s : series) {
             movies_series.add(new MovieSeries(
-                s.getId(), s.getTitle(), s.getSummary(), s.getRelease_year(),
+                s.getId(), s.getTitle(), s.getSummary(), s.getReleaseYear(),
                 s.getDuration(), s.getCountry(), s.getImdbRating(), s.getCover(),
                 "series"
             ));

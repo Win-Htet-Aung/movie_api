@@ -35,6 +35,9 @@ public class Movie {
     @Column(name = "imdb_rating")
     private Double imdbRating;
 
+    @Column(name = "user_rating")
+    private Double userRating = 0.0;
+
     @Column(name = "cover")
     private String cover;
 
@@ -71,7 +74,7 @@ public class Movie {
         joinColumns = @JoinColumn(name="movie_id"),
         inverseJoinColumns = @JoinColumn(name="review_id")
     )
-    @JsonIgnoreProperties({"movies", "series"})
+    @JsonIgnoreProperties({"movies", "series", "seasons", "episodes"})
     private Set<Review> reviews = new HashSet<Review>();
 
     public Set<Review> getReviews() {
@@ -144,14 +147,6 @@ public class Movie {
         this.summary = summary;
     }
 
-    public Integer getRelease_year() {
-        return releaseYear;
-    }
-
-    public void setRelease_year(Integer release_year) {
-        this.releaseYear = release_year;
-    }
-
     public Integer getDuration() {
         return duration;
     }
@@ -166,14 +161,6 @@ public class Movie {
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public Double getImdb_rating() {
-        return imdbRating;
-    }
-
-    public void setImdb_rating(Double imdb_rating) {
-        this.imdbRating = imdb_rating;
     }
 
     public String getCover() {
@@ -194,6 +181,30 @@ public class Movie {
 
     public void addProduction(Production production) {
         this.productions.add(production);
+    }
+
+    public Integer getReleaseYear() {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(Integer releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public Double getImdbRating() {
+        return imdbRating;
+    }
+
+    public void setImdbRating(Double imdbRating) {
+        this.imdbRating = imdbRating;
+    }
+
+    public Double getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(Double userRating) {
+        this.userRating = userRating;
     }
 
     @Override

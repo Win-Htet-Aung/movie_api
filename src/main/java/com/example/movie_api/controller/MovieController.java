@@ -1,6 +1,7 @@
 package com.example.movie_api.controller;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.movie_api.model.Movie;
+import com.example.movie_api.model.Review;
 import com.example.movie_api.service.MovieService;
 
 @RestController
@@ -39,6 +42,16 @@ public class MovieController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(movie);
+    }
+
+    @PostMapping("/movies/{movieId}/reviews")
+    public ResponseEntity<Void> createReview(@PathVariable Long movieId, @RequestBody Review newReview, Principal principal) {
+        Review createdReview = movieService.createReview(movieId, newReview, principal.getName());
+        URI new_review_location = UriComponentsBuilder
+                .fromPath("/reviews/{resourceId}")
+                .buildAndExpand(createdReview.getId())
+                .toUri();
+        return ResponseEntity.created(new_review_location).build();
     }
 
     @PostMapping("/movies")

@@ -38,7 +38,7 @@ class SeriesTests extends MovieApiApplicationTests {
 		ResponseEntity<Series> response = authRT().getForEntity(new_series_location, Series.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getTitle()).isEqualTo(series.getTitle());
-		assertThat(response.getBody().getRelease_year()).isEqualTo(series.getRelease_year());
+		assertThat(response.getBody().getReleaseYear()).isEqualTo(series.getReleaseYear());
 		assertThat(response.getBody().getCountry()).isEqualTo(series.getCountry());
 		assertThat(response.getBody().getImdbRating()).isEqualTo(series.getImdbRating());
 	}
@@ -74,7 +74,7 @@ class SeriesTests extends MovieApiApplicationTests {
 		authRT().put("/series/1", series);
 		Series updatedSeries = authRT().getForObject("/series/1", Series.class);
 		assertThat(updatedSeries.getTitle()).isEqualTo(series.getTitle());
-		assertThat(updatedSeries.getRelease_year()).isEqualTo(series.getRelease_year());
+		assertThat(updatedSeries.getReleaseYear()).isEqualTo(series.getReleaseYear());
 		assertThat(updatedSeries.getCountry()).isEqualTo(series.getCountry());
 		assertThat(updatedSeries.getImdbRating()).isEqualTo(series.getImdbRating());
 	}

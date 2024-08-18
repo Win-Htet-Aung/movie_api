@@ -22,7 +22,7 @@ public class Series {
     private String summary;
 
     @Column(name = "release_year")
-    private Integer release_year;
+    private Integer releaseYear;
 
     @Column(name = "duration")
     private Integer duration;
@@ -33,6 +33,9 @@ public class Series {
     @Column(name = "imdb_rating")
     private Double imdbRating;
 
+    @Column(name = "user_rating")
+    private Double userRating = 0.0;
+
     @Column(name = "cover")
     private String cover;
 
@@ -42,7 +45,7 @@ public class Series {
         joinColumns = @JoinColumn(name="series_id"),
         inverseJoinColumns = @JoinColumn(name="review_id")
     )
-    @JsonIgnoreProperties({"movies", "series"})
+    @JsonIgnoreProperties({"movies", "series", "seasons", "episodes"})
     private Set<Review> reviews = new HashSet<Review>();
 
     public Set<Review> getReviews() {
@@ -123,7 +126,7 @@ public class Series {
             Double imdb_rating, String cover) {
         this.title = title;
         this.summary = summary;
-        this.release_year = release_year;
+        this.releaseYear = release_year;
         this.duration = duration;
         this.country = country;
         this.imdbRating = imdb_rating;
@@ -152,14 +155,6 @@ public class Series {
 
     public void setSummary(String summary) {
         this.summary = summary;
-    }
-
-    public Integer getRelease_year() {
-        return release_year;
-    }
-
-    public void setRelease_year(Integer release_year) {
-        this.release_year = release_year;
     }
 
     public Integer getDuration() {
@@ -204,6 +199,22 @@ public class Series {
 
     public void addProduction(Production production) {
         this.productions.add(production);
+    }
+
+    public Integer getReleaseYear() {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(Integer releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public Double getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(Double userRating) {
+        this.userRating = userRating;
     }
 
     @Override

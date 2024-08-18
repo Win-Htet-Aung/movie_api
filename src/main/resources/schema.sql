@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `movies` (
   `duration` INT NOT NULL,
   `country` VARCHAR(100),
   `imdb_rating` DECIMAL(3,1),
+  `user_rating` DECIMAL(3,1),
   `cover` VARCHAR(255),
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
@@ -39,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `series` (
   `duration` INT NOT NULL,
   `country` VARCHAR(100),
   `imdb_rating` DECIMAL(3,1),
+  `user_rating` DECIMAL(3,1),
   `cover` VARCHAR(255),
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;

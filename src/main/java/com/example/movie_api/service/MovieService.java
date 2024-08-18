@@ -8,7 +8,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.movie_api.model.Movie;
+import com.example.movie_api.model.Review;
+import com.example.movie_api.model.User;
 import com.example.movie_api.repository.MovieRepository;
+import com.example.movie_api.repository.ReviewRepository;
+import com.example.movie_api.repository.UserRepository;
 import com.example.movie_api.utils.SearchCriteria;
 
 import jakarta.persistence.*;
@@ -21,6 +25,12 @@ public class MovieService {
 
     @Autowired
     private EntityManager em;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     public Page<Movie> getMovieList(Pageable pageable) {
         return movieRepository.findAll(PageRequest.of(
@@ -61,5 +71,18 @@ public class MovieService {
         );
         TypedQuery<Movie> tq = em.createQuery(cq);
         return tq.getResultList();
+    }
+
+    public Review createReview(Long movieId, Review newReview, String username) {
+        User user = userRepository.findByUsername(username);
+        Movie movie = getMovie(movieId);
+        newReview.setUser(user);
+        newReview.getMovies().add(movie);
+        Review savedReview = reviewRepository.save(newReview);
+        movie.getReviews().add(newReview);
+        Double newUserRating = (movie.getUserRating() + savedReview.getRating()) / 2;
+        movie.setUserRating(newUserRating);
+        movieRepository.save(movie);
+        return savedReview;
     }
 }

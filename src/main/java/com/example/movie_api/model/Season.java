@@ -42,6 +42,7 @@ public class Season {
         joinColumns = @JoinColumn(name="season_id"),
         inverseJoinColumns = @JoinColumn(name="review_id")
     )
+    @JsonIgnoreProperties({"movies", "series", "seasons", "episodes"})
     private Set<Review> reviews = new HashSet<Review>();
 
     public Season(Integer season_number, String summary, Integer release_year, Double imdb_rating) {

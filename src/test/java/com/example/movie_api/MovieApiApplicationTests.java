@@ -11,6 +11,6 @@ class MovieApiApplicationTests {
     protected TestRestTemplate restTemplate;
 
     protected TestRestTemplate authRT() {
-		return restTemplate.withBasicAuth("user", "user123");
+		return restTemplate.withBasicAuth("admin", "admin123");
 	}
 }
