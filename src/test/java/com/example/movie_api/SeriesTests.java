@@ -6,10 +6,8 @@ import java.net.URI;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +20,11 @@ import com.example.movie_api.model.Season;
 import com.example.movie_api.model.Series;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class SeriesTests {
-
-	@Autowired
-	private TestRestTemplate restTemplate;
+class SeriesTests extends MovieApiApplicationTests {
 
     @Test
 	void getSeriesList() {
-		ResponseEntity<Series[]> response = restTemplate.getForEntity("/series", Series[].class);
+		ResponseEntity<Series[]> response = authRT().getForEntity("/series", Series[].class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().length).isEqualTo(3);
@@ -39,8 +34,8 @@ class SeriesTests {
 	@DirtiesContext
 	void createSeries() {
 		Series series = new Series("Breaking Bad", "A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine.", 2008, 49, "USA", 9.5, "breaking_bad.jpg");
-		URI new_series_location = restTemplate.postForLocation("/series", series, Void.class);
-		ResponseEntity<Series> response = restTemplate.getForEntity(new_series_location, Series.class);
+		URI new_series_location = authRT().postForLocation("/series", series, Void.class);
+		ResponseEntity<Series> response = authRT().getForEntity(new_series_location, Series.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getTitle()).isEqualTo(series.getTitle());
 		assertThat(response.getBody().getRelease_year()).isEqualTo(series.getRelease_year());
@@ -51,9 +46,9 @@ class SeriesTests {
 	@Test
 	@DirtiesContext
 	void createSeriesWithRelationships() {
-		Genre[] genres = restTemplate.getForObject("/genres", Genre[].class);
-		Cast[] casts = restTemplate.getForObject("/casts", Cast[].class);
-		Production[] productions = restTemplate.getForObject("/productions", Production[].class);
+		Genre[] genres = authRT().getForObject("/genres", Genre[].class);
+		Cast[] casts = authRT().getForObject("/casts", Cast[].class);
+		Production[] productions = authRT().getForObject("/productions", Production[].class);
 		Series series = new Series("The Wire", "An American news satire and cable drama series.", 2002, 45, "USA", 9.0, "the_wire.jpg");
 		series.addGenre(genres[0]);
 		series.addGenre(genres[1]);
@@ -61,8 +56,8 @@ class SeriesTests {
 		series.addCast(casts[1]);
 		series.addProduction(productions[0]);
 		series.addProduction(productions[1]);
-		URI new_series_location = restTemplate.postForLocation("/series", series, Void.class);
-		ResponseEntity<Series> response = restTemplate.getForEntity(new_series_location, Series.class);
+		URI new_series_location = authRT().postForLocation("/series", series, Void.class);
+		ResponseEntity<Series> response = authRT().getForEntity(new_series_location, Series.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getGenres().contains(genres[0])).isTrue();
 		assertThat(response.getBody().getGenres().contains(genres[1])).isTrue();
@@ -76,8 +71,8 @@ class SeriesTests {
 	@DirtiesContext
 	void updateSeries() {
 		Series series = new Series("The Wire", "An American news satire and cable drama series.", 2002, 45, "USA", 9.0, "the_wire.jpg");
-		restTemplate.put("/series/1", series);
-		Series updatedSeries = restTemplate.getForObject("/series/1", Series.class);
+		authRT().put("/series/1", series);
+		Series updatedSeries = authRT().getForObject("/series/1", Series.class);
 		assertThat(updatedSeries.getTitle()).isEqualTo(series.getTitle());
 		assertThat(updatedSeries.getRelease_year()).isEqualTo(series.getRelease_year());
 		assertThat(updatedSeries.getCountry()).isEqualTo(series.getCountry());
@@ -87,23 +82,23 @@ class SeriesTests {
 	@Test
 	@DirtiesContext
 	void updateSeriesWithRelationships() {
-		Genre[] genres = restTemplate.getForObject("/genres", Genre[].class);
-		Cast[] casts = restTemplate.getForObject("/casts", Cast[].class);
-		Production[] productions = restTemplate.getForObject("/productions", Production[].class);
-		Series series = restTemplate.getForObject("/series/1", Series.class);
+		Genre[] genres = authRT().getForObject("/genres", Genre[].class);
+		Cast[] casts = authRT().getForObject("/casts", Cast[].class);
+		Production[] productions = authRT().getForObject("/productions", Production[].class);
+		Series series = authRT().getForObject("/series/1", Series.class);
 		series.addGenre(genres[0]);
 		series.addCast(casts[0]);
 		series.addProduction(productions[0]);
-		restTemplate.put("/series/1", series);
-		Series updatedSeries = restTemplate.getForObject("/series/1", Series.class);
+		authRT().put("/series/1", series);
+		Series updatedSeries = authRT().getForObject("/series/1", Series.class);
 		assertThat(updatedSeries.getGenres().contains(genres[0])).isTrue();
 		assertThat(updatedSeries.getCasts().contains(casts[0])).isTrue();
 		assertThat(updatedSeries.getProductions().contains(productions[0])).isTrue();		
 		updatedSeries.getGenres().clear();
 		updatedSeries.getCasts().clear();
 		updatedSeries.getProductions().clear();
-		restTemplate.put("/series/1", updatedSeries);
-		updatedSeries = restTemplate.getForObject("/series/1", Series.class);
+		authRT().put("/series/1", updatedSeries);
+		updatedSeries = authRT().getForObject("/series/1", Series.class);
 		assertThat(updatedSeries.getGenres().isEmpty()).isTrue();
 		assertThat(updatedSeries.getCasts().isEmpty()).isTrue();
 		assertThat(updatedSeries.getProductions().isEmpty()).isTrue();
@@ -112,37 +107,37 @@ class SeriesTests {
 	@Test
 	@DirtiesContext
 	void deleteSeries() {
-		ResponseEntity<Void> deleteResponse = restTemplate.exchange("/series/1", HttpMethod.DELETE, null, Void.class);
+		ResponseEntity<Void> deleteResponse = authRT().exchange("/series/1", HttpMethod.DELETE, null, Void.class);
 		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-		ResponseEntity<Series> response = restTemplate.getForEntity("/series/1", Series.class);
+		ResponseEntity<Series> response = authRT().getForEntity("/series/1", Series.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
 	@Test
 	@DirtiesContext
 	void deleteSeriesWithRelationships() {
-		Series series = restTemplate.getForObject("/series/3", Series.class);
+		Series series = authRT().getForObject("/series/3", Series.class);
 		Set<Genre> genres = series.getGenres();
 		Set<Cast> casts = series.getCasts();
 		Set<Production> productions = series.getProductions();
 		Set<Season> seasons = series.getSeasons();
-		restTemplate.delete("/series/3");
-		ResponseEntity<Series> response = restTemplate.getForEntity("/series/3", Series.class);
+		authRT().delete("/series/3");
+		ResponseEntity<Series> response = authRT().getForEntity("/series/3", Series.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 		for (Genre genre : genres) {
-			Genre g = restTemplate.getForObject("/genres/" + genre.getId(), Genre.class);
+			Genre g = authRT().getForObject("/genres/" + genre.getId(), Genre.class);
 			assertThat(g.getSeries().contains(series)).isFalse();
 		}
 		for (Cast cast : casts) {
-			Cast c = restTemplate.getForObject("/casts/" + cast.getId(), Cast.class);
+			Cast c = authRT().getForObject("/casts/" + cast.getId(), Cast.class);
 			assertThat(c.getSeries().contains(series)).isFalse();
 		}
 		for (Production production : productions) {
-			Production p = restTemplate.getForObject("/productions/" + production.getId(), Production.class);
+			Production p = authRT().getForObject("/productions/" + production.getId(), Production.class);
 			assertThat(p.getSeries().contains(series)).isFalse();
 		}
 		for (Season season : seasons) {
-			ResponseEntity<Season> sr = restTemplate.getForEntity("/seasons/" + season.getId(), Season.class);
+			ResponseEntity<Season> sr = authRT().getForEntity("/seasons/" + season.getId(), Season.class);
 			assertThat(sr.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 		}
 	}
