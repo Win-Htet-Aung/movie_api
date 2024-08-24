@@ -1,6 +1,7 @@
 package com.example.movie_api.controller;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import com.example.movie_api.model.Review;
 import com.example.movie_api.model.Season;
 import com.example.movie_api.service.SeasonService;
 
@@ -53,6 +56,16 @@ public class SeasonController {
             .buildAndExpand(newSeason.getId())
             .toUri();
         return ResponseEntity.created(newSeasonLocation).build();
+    }
+
+    @PostMapping("/seasons/{seasonId}/reviews")
+    public ResponseEntity<Void> createReview(@PathVariable Long seasonId, @RequestBody Review newReview, Principal principal) {
+        Review createdReview = seasonService.createReview(seasonId, newReview, principal.getName());
+        URI new_review_location = UriComponentsBuilder
+            .fromPath("/reviews/{resourceId}")
+            .buildAndExpand(createdReview.getId())
+            .toUri();
+        return ResponseEntity.created(new_review_location).build();
     }
 
     @PutMapping("/seasons/{seasonId}")

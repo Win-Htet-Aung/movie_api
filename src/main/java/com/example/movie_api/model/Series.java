@@ -36,6 +36,9 @@ public class Series {
     @Column(name = "user_rating")
     private Double userRating = 0.0;
 
+    @Column(name = "review_count")
+    private Integer reviewCount = 0;
+
     @Column(name = "cover")
     private String cover;
 
@@ -149,6 +152,14 @@ public class Series {
         this.title = title;
     }
 
+    public Integer getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(Integer reviewCount) {
+        this.reviewCount = reviewCount;
+    }
+
     public String getSummary() {
         return summary;
     }
@@ -240,5 +251,10 @@ public class Series {
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+        reviewCount++;
     }
 }

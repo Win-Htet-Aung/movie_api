@@ -26,8 +26,9 @@ CREATE TABLE IF NOT EXISTS `movies` (
   `release_year` INT NOT NULL,
   `duration` INT NOT NULL,
   `country` VARCHAR(100),
-  `imdb_rating` DECIMAL(3,1),
-  `user_rating` DECIMAL(3,1),
+  `imdb_rating` DECIMAL(8,6),
+  `user_rating` DECIMAL(8,6),
+  `review_count` INT NOT NULL,
   `cover` VARCHAR(255),
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
@@ -39,8 +40,9 @@ CREATE TABLE IF NOT EXISTS `series` (
   `release_year` INT NOT NULL,
   `duration` INT NOT NULL,
   `country` VARCHAR(100),
-  `imdb_rating` DECIMAL(3,1),
-  `user_rating` DECIMAL(3,1),
+  `imdb_rating` DECIMAL(8,6),
+  `user_rating` DECIMAL(8,6),
+  `review_count` INT NOT NULL,
   `cover` VARCHAR(255),
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
@@ -124,6 +126,8 @@ CREATE TABLE IF NOT EXISTS `seasons` (
   `summary` TEXT NOT NULL,
   `release_year` INT NOT NULL,
   `imdb_rating` DECIMAL(3,1),
+  `user_rating` DECIMAL(8,6),
+  `review_count` INT NOT NULL,
 
   PRIMARY KEY `id`(`id`),
   CONSTRAINT `U_SEASON` UNIQUE (`series_id`, `season_number`),
@@ -137,6 +141,8 @@ CREATE TABLE IF NOT EXISTS `episodes` (
   `episode_number` INT NOT NULL,
   `air_date` DATE NOT NULL,
   `imdb_rating` DECIMAL(3,1),
+  `user_rating` DECIMAL(8,6),
+  `review_count` INT NOT NULL,
 
   PRIMARY KEY `id`(`id`),
   CONSTRAINT `U_EPISODE` UNIQUE (`season_id`, `episode_number`),
@@ -165,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `comment` TEXT,
-  `rating` DECIMAL(3,1),
+  `rating` INT NOT NULL,
 
   PRIMARY KEY `id`(`id`),
   FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)

@@ -27,6 +27,12 @@ public class Season {
     @Column(name = "imdb_rating")
     private Double imdb_rating;
 
+    @Column(name = "user_rating")
+    private Double userRating = 0.0;
+
+    @Column(name = "review_count")
+    private Integer reviewCount = 0;
+
     @ManyToOne
     @JoinColumn(name = "series_id", nullable = false)
     @JsonIgnoreProperties(value = {"seasons"}, allowSetters = true)
@@ -77,6 +83,22 @@ public class Season {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public Double getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(Double userRating) {
+        this.userRating = userRating;
+    }
+
+    public Integer getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(Integer reviewCount) {
+        this.reviewCount = reviewCount;
     }
 
     public Integer getRelease_year() {
@@ -142,5 +164,10 @@ public class Season {
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+        reviewCount++;
     }
 }

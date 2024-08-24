@@ -20,7 +20,7 @@ public class Review {
     private String comment;
 
     @Column(name = "rating")
-    private Double rating;
+    private Integer rating;
 
     @ManyToOne
     @JsonIgnoreProperties(value = {"reviews"}, allowSetters = true)
@@ -78,7 +78,7 @@ public class Review {
     public Review() {
     }
 
-    public Review(Double rating, String comment) {
+    public Review(Integer rating, String comment) {
         this.rating = rating;
         this.comment = comment;
     }
@@ -91,11 +91,11 @@ public class Review {
         this.id = id;
     }
 
-    public Double getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(Double rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 

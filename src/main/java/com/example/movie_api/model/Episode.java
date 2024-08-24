@@ -28,6 +28,12 @@ public class Episode {
     @Column(name = "imdb_rating")
     private Double imdb_rating;
 
+    @Column(name = "user_rating")
+    private Double userRating = 0.0;
+
+    @Column(name = "review_count")
+    private Integer reviewCount = 0;
+
     @ManyToMany
     @JoinTable(
         name = "episode_review",
@@ -58,6 +64,22 @@ public class Episode {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Double getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(Double userRating) {
+        this.userRating = userRating;
+    }
+
+    public Integer getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(Integer reviewCount) {
+        this.reviewCount = reviewCount;
     }
 
     public Integer getEpisode_number() {
@@ -131,5 +153,10 @@ public class Episode {
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+        reviewCount++;
     }
 }

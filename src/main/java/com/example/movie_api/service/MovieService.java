@@ -79,9 +79,13 @@ public class MovieService {
         newReview.setUser(user);
         newReview.getMovies().add(movie);
         Review savedReview = reviewRepository.save(newReview);
-        movie.getReviews().add(newReview);
-        Double newUserRating = (movie.getUserRating() + savedReview.getRating()) / 2;
-        movie.setUserRating(newUserRating);
+        if (movie.getReviewCount() == 0) {
+            movie.setUserRating(Double.valueOf(savedReview.getRating()));
+        } else {
+            Double total = movie.getUserRating() * movie.getReviewCount() + savedReview.getRating();
+            movie.setUserRating(total / (movie.getReviewCount() + 1));
+        }
+        movie.addReview(newReview);
         movieRepository.save(movie);
         return savedReview;
     }
