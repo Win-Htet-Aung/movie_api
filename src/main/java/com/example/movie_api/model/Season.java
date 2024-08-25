@@ -170,4 +170,15 @@ public class Season {
         reviews.add(review);
         reviewCount++;
     }
+
+    public void removeReview(Review review) {
+        if (reviewCount == 1) {
+            userRating = 0.0;
+        } else {
+            Double total = userRating * reviewCount - review.getRating();
+            userRating = total / (reviewCount - 1);
+        }
+        reviews.remove(review);
+        reviewCount--;
+    }
 }

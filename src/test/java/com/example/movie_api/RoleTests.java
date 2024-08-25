@@ -24,7 +24,7 @@ public class RoleTests extends MovieApiApplicationTests {
     public void getRoleList() {
         ResponseEntity<Role[]> response = authRT().getForEntity("/roles", Role[].class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().length).isEqualTo(2);
+        assertThat(response.getBody().length).isEqualTo(3);
     }
 
     @Test
@@ -57,10 +57,13 @@ public class RoleTests extends MovieApiApplicationTests {
         Set<User> users = role.getUsers();
         authRT().delete("/roles/1");
         ResponseEntity<Role> response = authRT().getForEntity("/roles/1", Role.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         for (User user : users) {
             ResponseEntity<User> uResp = authRT().getForEntity("/users/" + user.getId(), User.class);
-            assertThat(uResp.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+            assertThat(uResp.getStatusCode()).isEqualTo(HttpStatus.OK);
         }
+        authRT().delete("/roles/3");
+        response = authRT().getForEntity("/roles/3", Role.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 }

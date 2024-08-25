@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-@JsonIgnoreProperties({"password", "role"})
+@JsonIgnoreProperties(value = {"password", "reviews"}, allowSetters = true)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

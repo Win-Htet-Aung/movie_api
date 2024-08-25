@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
+import com.example.movie_api.dto.UserRequest;
 import com.example.movie_api.model.Role;
 import com.example.movie_api.model.User;
 
@@ -29,7 +30,7 @@ public class UserTests extends MovieApiApplicationTests {
     @Test
     @DirtiesContext
     public void createUser() {
-        User user = new User("testuser", "Test User", "testuser@example.com", "testpassword");
+        UserRequest user = new UserRequest("testuser", "Test User", "testuser@example.com", "testpassword");
         URI new_user_location = authRT().postForLocation("/users", user);
         ResponseEntity<User> response = authRT().getForEntity(new_user_location, User.class);
         assertThat(response.getBody().getUsername()).isEqualTo("testuser");
@@ -40,16 +41,17 @@ public class UserTests extends MovieApiApplicationTests {
     @Test
     @DirtiesContext
     public void updateUser() {
-        User user = new User("testuser", "Test User", "testuser@example.com", "testpassword");
-        authRT().put("/users/1", user);
-        ResponseEntity<User> response = authRT().getForEntity("/users/1", User.class);
+        UserRequest user = new UserRequest("testuser", "Test User", "testuser@example.com", "testpassword");
+        authRT().put("/users/2", user);
+        ResponseEntity<User> response = authRT().getForEntity("/users/2", User.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getUsername()).isEqualTo("testuser");
         assertThat(response.getBody().getDisplayname()).isEqualTo("Test User");
         Role[] roles = authRT().getForObject("/roles", Role[].class);
-        user.setRole(roles[1]);
-        authRT().put("/users/1", user);
-        response = authRT().getForEntity("/users/1", User.class);
-        assertThat(response.getBody().getRole().getName()).isEqualTo("user");
+        user.setRole(roles[0]);
+        authRT().put("/users/2", user);
+        response = authRT().getForEntity("/users/2", User.class);
+        assertThat(response.getBody().getRole().getName()).isEqualTo("admin");
     }
 
     @Test
@@ -63,10 +65,10 @@ public class UserTests extends MovieApiApplicationTests {
     @Test
     @DirtiesContext
     public void deleteUser() {
-        User user = authRT().getForObject("/users/1", User.class);
+        User user = authRT().getForObject("/users/2", User.class);
         Role role = user.getRole();
-        authRT().delete("/users/1");
-        ResponseEntity<User> response = authRT().getForEntity("/users/1", User.class);
+        authRT().delete("/users/2");
+        ResponseEntity<User> response = authRT().getForEntity("/users/2", User.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         role = authRT().getForObject("/roles/" + role.getId(), Role.class);
         assertThat(role.getUsers().size()).isEqualTo(0);

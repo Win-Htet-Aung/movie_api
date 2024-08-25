@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.movie_api.model.Review;
 import com.example.movie_api.model.Role;
 import com.example.movie_api.model.User;
 import com.example.movie_api.repository.RoleRepository;
@@ -16,6 +17,9 @@ public class UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private ReviewService reviewService;
 
     public Iterable<User> getUsers() {
         return userRepository.findAll();
@@ -34,7 +38,10 @@ public class UserService {
     }
 
     public void updateUser(Long id, User updateUser) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
         User user = getUserById(id);
+        System.out.println("=> " + updateUser.getPassword());
+        updateUser.setPassword("{bcrypt}" + encoder.encode(updateUser.getPassword()));
         if (updateUser.getRole() == null) {
             updateUser.setRole(user.getRole());
         }
@@ -46,6 +53,10 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
+        User user = getUserById(id);
+        for (Review review : user.getReviews()) {
+            reviewService.deleteReview(review.getId());
+        }
         userRepository.deleteById(id);
     }
 }
