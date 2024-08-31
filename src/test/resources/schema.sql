@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `series` (
 
 CREATE TABLE IF NOT EXISTS `genres` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100),
+  `name` VARCHAR(100) UNIQUE,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `casts` (
 
 CREATE TABLE IF NOT EXISTS `productions` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100),
+  `name` VARCHAR(100) UNIQUE,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
@@ -157,9 +157,9 @@ CREATE TABLE IF NOT EXISTS `roles` (
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(255),
+  `username` VARCHAR(255) UNIQUE,
   `displayname` VARCHAR(255),
-  `email` VARCHAR(255),
+  `email` VARCHAR(255) UNIQUE,
   `password` VARCHAR(255),
   `role_id` INT NOT NULL,
 

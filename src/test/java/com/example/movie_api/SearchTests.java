@@ -18,7 +18,7 @@ public class SearchTests extends MovieApiApplicationTests {
 
     @Test
     public void getSearchPage() {
-        ResponseEntity<CustomPageImpl<MovieSeries>> response = authRT().exchange(
+        ResponseEntity<CustomPageImpl<MovieSeries>> response = restTemplate.exchange(
             "/search?query=&page=1&size=10", HttpMethod.GET, null,
             new ParameterizedTypeReference<CustomPageImpl<MovieSeries>>() {}
         );

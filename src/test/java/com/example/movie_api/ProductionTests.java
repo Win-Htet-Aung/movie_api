@@ -20,7 +20,7 @@ class ProductionTests extends MovieApiApplicationTests {
 
     @Test
 	void getProductionList() {
-		ResponseEntity<Production[]> response = authRT().getForEntity("/productions", Production[].class);
+		ResponseEntity<Production[]> response = authRT("user").getForEntity("/productions", Production[].class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().length).isEqualTo(6);
@@ -30,9 +30,9 @@ class ProductionTests extends MovieApiApplicationTests {
 	@DirtiesContext
 	void createProduction() {
 		Production production = new Production("Star Wars");
-		URI new_production_location = authRT().postForLocation("/productions", production, Void.class);
+		URI new_production_location = authRT("admin").postForLocation("/productions", production, Void.class);
 		assertNotNull(new_production_location);
-		ResponseEntity<Production> response = authRT().getForEntity(new_production_location, Production.class);
+		ResponseEntity<Production> response = authRT("user").getForEntity(new_production_location, Production.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getName()).isEqualTo("Star Wars");
 	}
@@ -41,16 +41,16 @@ class ProductionTests extends MovieApiApplicationTests {
 	@DirtiesContext
 	void updateProduction() {
 		Production production = new Production("Marvel Cinematic Universe");
-		authRT().put("/productions/1", production);
-		Production updatedProduction = authRT().getForObject("/productions/1", Production.class);
+		authRT("user").put("/productions/1", production);
+		Production updatedProduction = authRT("user").getForObject("/productions/1", Production.class);
 		assertThat(updatedProduction.getName()).isEqualTo("Marvel Cinematic Universe");
 	}
 
 	@Test
 	void updatedProductionNotFound() {
 		Production production = new Production("20th Century Fox");
-		authRT().put("/productions/10", production);
-		ResponseEntity<Production> response = authRT().getForEntity("/productions/10", Production.class);
+		authRT("user").put("/productions/10", production);
+		ResponseEntity<Production> response = authRT("user").getForEntity("/productions/10", Production.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 		assertThat(response.getBody()).isNull();
 	}
@@ -58,11 +58,11 @@ class ProductionTests extends MovieApiApplicationTests {
 	@Test
 	@DirtiesContext
 	void deleteProduction() {
-		ResponseEntity<Production> response = authRT().getForEntity("/productions/1", Production.class);
+		ResponseEntity<Production> response = authRT("user").getForEntity("/productions/1", Production.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		ResponseEntity<Void> deleteResponse = authRT().exchange("/productions/1", HttpMethod.DELETE, null, Void.class);
+		ResponseEntity<Void> deleteResponse = authRT("user").exchange("/productions/1", HttpMethod.DELETE, null, Void.class);
 		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-		response = authRT().getForEntity("/productions/1", Production.class);
+		response = authRT("user").getForEntity("/productions/1", Production.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 }

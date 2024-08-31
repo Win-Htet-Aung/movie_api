@@ -40,7 +40,6 @@ public class UserService {
     public void updateUser(Long id, User updateUser) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
         User user = getUserById(id);
-        System.out.println("=> " + updateUser.getPassword());
         updateUser.setPassword("{bcrypt}" + encoder.encode(updateUser.getPassword()));
         if (updateUser.getRole() == null) {
             updateUser.setRole(user.getRole());

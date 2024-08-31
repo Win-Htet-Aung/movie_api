@@ -243,14 +243,6 @@ public class Movie {
         return true;
     }
 
-    public List<String> getGenreNames() {
-        List<String> genreNames = new ArrayList<String>();
-        for (Genre genre : genres) {
-            genreNames.add(genre.getName());
-        }
-        return genreNames;
-    }
-
     public void addReview(Review review) {
         reviews.add(review);
         reviewCount++;

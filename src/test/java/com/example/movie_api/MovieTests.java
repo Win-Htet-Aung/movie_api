@@ -26,7 +26,7 @@ class MovieTests extends MovieApiApplicationTests {
 
     @Test
 	void getMovieList() {
-		ResponseEntity<CustomPageImpl<Movie>> response = authRT().exchange(
+		ResponseEntity<CustomPageImpl<Movie>> response = restTemplate.exchange(
 			"/movies?page=1&size=2&sort=imdbRating,desc", HttpMethod.GET,
 			null, new ParameterizedTypeReference<CustomPageImpl<Movie>>(){}
 		);
@@ -41,9 +41,9 @@ class MovieTests extends MovieApiApplicationTests {
 	@DirtiesContext
 	void createMovie() {
 		Movie movie = new Movie("The Matrix", "When a beautiful but troubled young woman comes to him with a dead body, Detective Fox Mulder is sent to investigate a bizarre crime.", 1999, 136, "USA", 8.7, "matrix.jpg");
-		URI new_movie_location = authRT().postForLocation("/movies", movie, Void.class);
+		URI new_movie_location = authRT("admin").postForLocation("/movies", movie, Void.class);
 		assertNotNull(new_movie_location);
-		ResponseEntity<Movie> response = authRT().getForEntity(new_movie_location, Movie.class);
+		ResponseEntity<Movie> response = restTemplate.getForEntity(new_movie_location, Movie.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getTitle()).isEqualTo("The Matrix");
 		assertThat(response.getBody().getDuration()).isEqualTo(136);
@@ -54,18 +54,18 @@ class MovieTests extends MovieApiApplicationTests {
 	@Test
 	@DirtiesContext
 	void createMovieWithGenre() {
-		Genre[] genres = authRT().getForObject("/genres", Genre[].class);
+		Genre[] genres = authRT("user").getForObject("/genres", Genre[].class);
 		Movie movie = new Movie("The Matrix", "When a beautiful but troubled young woman comes to him with a dead body, Detective Fox Mulder is sent to investigate a bizarre crime.", 1999, 136, "USA", 8.7, "matrix.jpg");
 		movie.addGenre(genres[0]);
 		movie.addGenre(genres[1]);
-		URI new_movie_location = authRT().postForLocation("/movies", movie, Void.class);
+		URI new_movie_location = authRT("admin").postForLocation("/movies", movie, Void.class);
 		assertNotNull(new_movie_location);
-		ResponseEntity<Movie> response = authRT().getForEntity(new_movie_location, Movie.class);
+		ResponseEntity<Movie> response = authRT("user").getForEntity(new_movie_location, Movie.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getGenres().size()).isEqualTo(2);
 		assertThat(response.getBody().getGenres().contains(genres[0])).isTrue();
 		assertThat(response.getBody().getGenres().contains(genres[1])).isTrue();
-		ResponseEntity<CustomPageImpl<Movie>> moviesListResponse = authRT().exchange(
+		ResponseEntity<CustomPageImpl<Movie>> moviesListResponse = authRT("user").exchange(
 			"/movies?page=1&size=1&sort=id,desc&allGenre=true&genre=" + genres[0].getName() + "," + genres[1].getName(),
 			HttpMethod.GET, null,
 			new ParameterizedTypeReference<CustomPageImpl<Movie>>(){}
@@ -77,19 +77,19 @@ class MovieTests extends MovieApiApplicationTests {
 	@Test
 	@DirtiesContext
 	void createMovieWithCast() {
-		Cast[] casts = authRT().getForObject("/casts", Cast[].class);
+		Cast[] casts = authRT("user").getForObject("/casts", Cast[].class);
 		Movie movie = new Movie("The Matrix", "When a beautiful but troubled young woman comes to him with a dead body, Detective Fox Mulder is sent to investigate a bizarre crime.", 1999, 136, "USA", 8.7, "matrix.jpg");
 		movie.addCast(casts[0]);
 		movie.addCast(casts[1]);
-		URI new_movie_location = authRT().postForLocation("/movies", movie, Void.class);
+		URI new_movie_location = authRT("admin").postForLocation("/movies", movie, Void.class);
 		assertNotNull(new_movie_location);
-		ResponseEntity<Movie> response = authRT().getForEntity(new_movie_location, Movie.class);
+		ResponseEntity<Movie> response = authRT("user").getForEntity(new_movie_location, Movie.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getCasts().size()).isEqualTo(2);
 		assertThat(response.getBody().getCasts().contains(casts[0])).isTrue();
 		assertThat(response.getBody().getCasts().contains(casts[1])).isTrue();
-		Cast c1 = authRT().getForObject("/casts/1", Cast.class);
-		Cast c2 = authRT().getForObject("/casts/2", Cast.class);
+		Cast c1 = authRT("user").getForObject("/casts/1", Cast.class);
+		Cast c2 = authRT("user").getForObject("/casts/2", Cast.class);
 		assertThat(c1.getMovies().contains(response.getBody())).isTrue();
 		assertThat(c2.getMovies().contains(response.getBody())).isTrue();
 	}
@@ -97,19 +97,19 @@ class MovieTests extends MovieApiApplicationTests {
 	@Test
 	@DirtiesContext
 	void createMovieWithProduction() {
-		Production[] productions = authRT().getForObject("/productions", Production[].class);
+		Production[] productions = authRT("user").getForObject("/productions", Production[].class);
 		Movie movie = new Movie("The Matrix", "When a beautiful but troubled young woman comes to him with a dead body, Detective Fox Mulder is sent to investigate a bizarre crime.", 1999, 136, "USA", 8.7, "matrix.jpg");
 		movie.addProduction(productions[0]);
 		movie.addProduction(productions[1]);
-		URI new_movie_location = authRT().postForLocation("/movies", movie, Void.class);
+		URI new_movie_location = authRT("admin").postForLocation("/movies", movie, Void.class);
 		assertNotNull(new_movie_location);
-		ResponseEntity<Movie> response = authRT().getForEntity(new_movie_location, Movie.class);
+		ResponseEntity<Movie> response = authRT("user").getForEntity(new_movie_location, Movie.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getProductions().size()).isEqualTo(2);
 		assertThat(response.getBody().getProductions().contains(productions[0])).isTrue();
 		assertThat(response.getBody().getProductions().contains(productions[1])).isTrue();
-		Production p1 = authRT().getForObject("/productions/1", Production.class);
-		Production p2 = authRT().getForObject("/productions/2", Production.class);
+		Production p1 = authRT("user").getForObject("/productions/1", Production.class);
+		Production p2 = authRT("user").getForObject("/productions/2", Production.class);
 		assertThat(p1.getMovies().contains(response.getBody())).isTrue();
 		assertThat(p2.getMovies().contains(response.getBody())).isTrue();
 	}
@@ -118,8 +118,8 @@ class MovieTests extends MovieApiApplicationTests {
 	@DirtiesContext
 	void updateMovie() {
 		Movie movie = new Movie("The Matrix", "When a beautiful but troubled young woman comes to him with a dead body, Detective Fox Mulder is sent to investigate a bizarre crime.", 1999, 136, "USA", 8.7, "matrix.jpg");
-		authRT().put("/movies/1", movie);
-		ResponseEntity<Movie> response = authRT().getForEntity("/movies/1", Movie.class);
+		authRT("user").put("/movies/1", movie);
+		ResponseEntity<Movie> response = authRT("user").getForEntity("/movies/1", Movie.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getTitle()).isEqualTo("The Matrix");
 		assertThat(response.getBody().getDuration()).isEqualTo(136);
@@ -130,22 +130,22 @@ class MovieTests extends MovieApiApplicationTests {
 	@Test
 	@DirtiesContext
 	void updateMovieGenre() {
-		Genre[] genres = authRT().getForObject("/genres", Genre[].class);
-		Movie movie = authRT().getForObject("/movies/1", Movie.class);
+		Genre[] genres = authRT("user").getForObject("/genres", Genre[].class);
+		Movie movie = authRT("user").getForObject("/movies/1", Movie.class);
 		movie.addGenre(genres[0]);
 		movie.addGenre(genres[1]);
-		authRT().put("/movies/1", movie);
-		ResponseEntity<Movie> response = authRT().getForEntity("/movies/1", Movie.class);
+		authRT("user").put("/movies/1", movie);
+		ResponseEntity<Movie> response = authRT("user").getForEntity("/movies/1", Movie.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getGenres().size()).isEqualTo(2);
 		assertThat(response.getBody().getGenres().contains(genres[0])).isTrue();
 		assertThat(response.getBody().getGenres().contains(genres[1])).isTrue();
-		Genre g1 = authRT().getForObject("/genres/1", Genre.class);
-		Genre g2 = authRT().getForObject("/genres/2", Genre.class);
+		Genre g1 = authRT("user").getForObject("/genres/1", Genre.class);
+		Genre g2 = authRT("user").getForObject("/genres/2", Genre.class);
 		movie = response.getBody();
 		movie.getGenres().remove(g1);
-		authRT().put("/movies/1", movie);
-		movie = authRT().getForObject("/movies/1", Movie.class);
+		authRT("user").put("/movies/1", movie);
+		movie = authRT("user").getForObject("/movies/1", Movie.class);
 		assertThat(movie.getGenres().contains(g1)).isFalse();
 		assertThat(movie.getGenres().contains(g2)).isTrue();
 	}
@@ -153,28 +153,28 @@ class MovieTests extends MovieApiApplicationTests {
 	@Test
 	@DirtiesContext
 	void updateMovieCast() {
-		Cast[] casts = authRT().getForObject("/casts", Cast[].class);
-		Movie movie = authRT().getForObject("/movies/1", Movie.class);
+		Cast[] casts = authRT("user").getForObject("/casts", Cast[].class);
+		Movie movie = authRT("user").getForObject("/movies/1", Movie.class);
 		movie.addCast(casts[0]);
 		movie.addCast(casts[1]);
-		authRT().put("/movies/1", movie);
-		ResponseEntity<Movie> response = authRT().getForEntity("/movies/1", Movie.class);
+		authRT("user").put("/movies/1", movie);
+		ResponseEntity<Movie> response = authRT("user").getForEntity("/movies/1", Movie.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getCasts().size()).isEqualTo(2);
 		assertThat(response.getBody().getCasts().contains(casts[0])).isTrue();
 		assertThat(response.getBody().getCasts().contains(casts[1])).isTrue();
-		Cast c1 = authRT().getForObject("/casts/1", Cast.class);
-		Cast c2 = authRT().getForObject("/casts/2", Cast.class);
+		Cast c1 = authRT("user").getForObject("/casts/1", Cast.class);
+		Cast c2 = authRT("user").getForObject("/casts/2", Cast.class);
 		assertThat(c1.getMovies().contains(response.getBody())).isTrue();
 		assertThat(c2.getMovies().contains(response.getBody())).isTrue();
 		movie = response.getBody();
 		movie.getCasts().remove(c1);
-		authRT().put("/movies/1", movie);
-		movie = authRT().getForObject("/movies/1", Movie.class);
+		authRT("user").put("/movies/1", movie);
+		movie = authRT("user").getForObject("/movies/1", Movie.class);
 		assertThat(movie.getCasts().contains(c1)).isFalse();
 		assertThat(movie.getCasts().contains(c2)).isTrue();
-		c1 = authRT().getForObject("/casts/1", Cast.class);
-		c2 = authRT().getForObject("/casts/2", Cast.class);
+		c1 = authRT("user").getForObject("/casts/1", Cast.class);
+		c2 = authRT("user").getForObject("/casts/2", Cast.class);
 		assertThat(c1.getMovies().contains(movie)).isFalse();
 		assertThat(c2.getMovies().contains(movie)).isTrue();
 	}
@@ -182,28 +182,28 @@ class MovieTests extends MovieApiApplicationTests {
 	@Test
 	@DirtiesContext
 	void updateMovieProduction() {
-		Production[] productions = authRT().getForObject("/productions", Production[].class);
-		Movie movie = authRT().getForObject("/movies/1", Movie.class);
+		Production[] productions = authRT("user").getForObject("/productions", Production[].class);
+		Movie movie = authRT("user").getForObject("/movies/1", Movie.class);
 		movie.addProduction(productions[0]);
 		movie.addProduction(productions[1]);
-		authRT().put("/movies/1", movie);
-		ResponseEntity<Movie> response = authRT().getForEntity("/movies/1", Movie.class);
+		authRT("user").put("/movies/1", movie);
+		ResponseEntity<Movie> response = authRT("user").getForEntity("/movies/1", Movie.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().getProductions().size()).isEqualTo(2);
 		assertThat(response.getBody().getProductions().contains(productions[0])).isTrue();
 		assertThat(response.getBody().getProductions().contains(productions[1])).isTrue();
-		Production p1 = authRT().getForObject("/productions/1", Production.class);
-		Production p2 = authRT().getForObject("/productions/2", Production.class);
+		Production p1 = authRT("user").getForObject("/productions/1", Production.class);
+		Production p2 = authRT("user").getForObject("/productions/2", Production.class);
 		assertThat(p1.getMovies().contains(response.getBody())).isTrue();
 		assertThat(p2.getMovies().contains(response.getBody())).isTrue();
 		movie = response.getBody();
 		movie.getProductions().remove(p1);
-		authRT().put("/movies/1", movie);
-		movie = authRT().getForObject("/movies/1", Movie.class);
+		authRT("user").put("/movies/1", movie);
+		movie = authRT("user").getForObject("/movies/1", Movie.class);
 		assertThat(movie.getProductions().contains(p1)).isFalse();
 		assertThat(movie.getProductions().contains(p2)).isTrue();
-		p1 = authRT().getForObject("/productions/1", Production.class);
-		p2 = authRT().getForObject("/productions/2", Production.class);
+		p1 = authRT("user").getForObject("/productions/1", Production.class);
+		p2 = authRT("user").getForObject("/productions/2", Production.class);
 		assertThat(p1.getMovies().contains(movie)).isFalse();
 		assertThat(p2.getMovies().contains(movie)).isTrue();
 	}
@@ -211,33 +211,33 @@ class MovieTests extends MovieApiApplicationTests {
 	@Test
 	@DirtiesContext
 	void deleteMovie() {
-		authRT().delete("/movies/1");
-		ResponseEntity<Movie> response = authRT().getForEntity("/movies/1", Movie.class);
+		authRT("user").delete("/movies/1");
+		ResponseEntity<Movie> response = authRT("user").getForEntity("/movies/1", Movie.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
 	@Test
 	@DirtiesContext
 	void deleteMovieWithRelationships() {
-		Movie movie = authRT().getForObject("/movies/3", Movie.class);
+		Movie movie = authRT("user").getForObject("/movies/3", Movie.class);
 		Set<Genre> genres = movie.getGenres();
 		Set<Cast> casts = movie.getCasts();
 		Set<Production> productions = movie.getProductions();
-		authRT().delete("/movies/3");
-		ResponseEntity<Movie> response = authRT().getForEntity("/movies/3", Movie.class);
+		authRT("user").delete("/movies/3");
+		ResponseEntity<Movie> response = authRT("user").getForEntity("/movies/3", Movie.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 		for (Genre genre : genres) {
-			ResponseEntity<Genre> genre_response = authRT().getForEntity("/genres/" + genre.getId(), Genre.class);
+			ResponseEntity<Genre> genre_response = authRT("user").getForEntity("/genres/" + genre.getId(), Genre.class);
 			assertThat(genre_response.getStatusCode()).isEqualTo(HttpStatus.OK);
 			assertThat(genre_response.getBody().getMovies().contains(movie)).isFalse();
 		}
 		for (Cast cast : casts) {
-			ResponseEntity<Cast> cast_response = authRT().getForEntity("/casts/" + cast.getId(), Cast.class);
+			ResponseEntity<Cast> cast_response = authRT("user").getForEntity("/casts/" + cast.getId(), Cast.class);
 			assertThat(cast_response.getStatusCode()).isEqualTo(HttpStatus.OK);
 			assertThat(cast_response.getBody().getMovies().contains(movie)).isFalse();
 		}
 		for (Production production : productions) {
-			ResponseEntity<Production> production_response = authRT().getForEntity("/productions/" + production.getId(), Production.class);
+			ResponseEntity<Production> production_response = authRT("user").getForEntity("/productions/" + production.getId(), Production.class);
 			assertThat(production_response.getStatusCode()).isEqualTo(HttpStatus.OK);
 			assertThat(production_response.getBody().getMovies().contains(movie)).isFalse();
 		}

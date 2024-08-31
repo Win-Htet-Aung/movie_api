@@ -10,7 +10,10 @@ class MovieApiApplicationTests {
     @Autowired
     protected TestRestTemplate restTemplate;
 
-    protected TestRestTemplate authRT() {
-		return restTemplate.withBasicAuth("admin", "admin123");
+    protected TestRestTemplate authRT(String role) {
+        if (role.equals("user")) {
+            return restTemplate.withBasicAuth("user", "user123");
+        }
+        return restTemplate.withBasicAuth("admin", "admin123");
 	}
 }
