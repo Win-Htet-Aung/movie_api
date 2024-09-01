@@ -1,6 +1,7 @@
 package com.example.movie_api.controller;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,13 +53,15 @@ public class UserController {
     }
 
     @PutMapping("/users/{userId}")
-    public ResponseEntity<Void> updateUser(@PathVariable Long userId, @RequestBody User user) {
+    public ResponseEntity<Void> updateUser(@PathVariable Long userId, @RequestBody User user, Principal principal) {
         try {
-            userService.updateUser(userId, user);
+            userService.updateUser(userId, user, principal.getName());
         } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.badRequest().build();
+        } catch (SecurityException e) {
+            return ResponseEntity.status(403).build();
         }
         return ResponseEntity.noContent().build();
     }

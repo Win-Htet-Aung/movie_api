@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS `series`;
 
 CREATE TABLE IF NOT EXISTS `movies` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `slug` VARCHAR(255) UNIQUE,
   `title` VARCHAR(255),
   `summary` TEXT NOT NULL,
   `release_year` INT NOT NULL,
@@ -35,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `movies` (
 
 CREATE TABLE IF NOT EXISTS `series` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `slug` VARCHAR(255) UNIQUE,
   `title` VARCHAR(255),
   `summary` TEXT NOT NULL,
   `release_year` INT NOT NULL,

@@ -38,7 +38,7 @@ class CastTests extends MovieApiApplicationTests {
 	void deleteCast() {
 		ResponseEntity<Cast> response = authRT("user").getForEntity("/casts/1", Cast.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		ResponseEntity<Void> deleteResponse = authRT("user").exchange("/casts/1", HttpMethod.DELETE, null, Void.class);
+		ResponseEntity<Void> deleteResponse = authRT("admin").exchange("/casts/1", HttpMethod.DELETE, null, Void.class);
 		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 		response = authRT("user").getForEntity("/casts/1", Cast.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);

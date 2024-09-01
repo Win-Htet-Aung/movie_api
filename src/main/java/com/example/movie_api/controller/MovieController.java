@@ -33,20 +33,20 @@ public class MovieController {
         return ResponseEntity.ok(page);
     }
 
-    @GetMapping("/movies/{movieId}")
-    public ResponseEntity<Movie> getMovie(@PathVariable Long movieId) {
+    @GetMapping("/movies/{slug}")
+    public ResponseEntity<Movie> getMovie(@PathVariable String slug) {
         Movie movie;
         try {
-            movie = movieService.getMovie(movieId);
+            movie = movieService.getMovie(slug);
         } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(movie);
     }
 
-    @PostMapping("/movies/{movieId}/reviews")
-    public ResponseEntity<Void> createReview(@PathVariable Long movieId, @RequestBody Review newReview, Principal principal) {
-        Review createdReview = movieService.createReview(movieId, newReview, principal.getName());
+    @PostMapping("/movies/{slug}/reviews")
+    public ResponseEntity<Void> createReview(@PathVariable String slug, @RequestBody Review newReview, Principal principal) {
+        Review createdReview = movieService.createReview(slug, newReview, principal.getName());
         URI new_review_location = UriComponentsBuilder
                 .fromPath("/reviews/{resourceId}")
                 .buildAndExpand(createdReview.getId())
@@ -60,19 +60,19 @@ public class MovieController {
         URI new_movie_location = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
                 .path("/{resourceId}")
-                .buildAndExpand(createdMovie.getId())
+                .buildAndExpand(createdMovie.getSlug())
                 .toUri();
         return ResponseEntity.created(new_movie_location).build();
     }
 
-    @PutMapping("/movies/{movieId}")
-    public ResponseEntity<Void> updateMovie(@PathVariable Long movieId, @RequestBody Movie updatedMovie) {
+    @PutMapping("/movies/{slug}")
+    public ResponseEntity<Void> updateMovie(@PathVariable String slug, @RequestBody Movie updatedMovie) {
         try {
-            movieService.getMovie(movieId);
+            movieService.getMovie(slug);
         } catch (NoSuchElementException e) {
             return ResponseEntity.notFound().build();
         }
-        movieService.updateMovie(movieId, updatedMovie);
+        movieService.updateMovie(slug, updatedMovie);
         return ResponseEntity.noContent().build();
     }
 

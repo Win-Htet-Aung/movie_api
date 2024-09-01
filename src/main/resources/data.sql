@@ -40,11 +40,11 @@ INSERT INTO `productions` (`name`) VALUES
 ;
 
 -- movies
-INSERT INTO `movies` (`title`, `summary`, `release_year`, `duration`, `country`, `imdb_rating`, `user_rating`, `review_count`, `cover`) VALUES
-('The Godfather', 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.', 1972, 175, 'USA', 9.2, 8.5, 2, 'godfather.jpg'),
-('The Shawshank Redemption', 'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.', 1994, 142, 'USA', 9.3, 7.0, 1, 'shawshank.jpg'),
-('The Big Lebowski', 'The Dude finds himself in the middle of a crooked police investigation.', 1998, 117, 'USA', 8.2, 0.0, 0, 'big_lebowski.jpg'),
-('Big Hero 6', 'The special bond that develops between plus-sized inflatable robot Baymax, and prodigy Hiro Hamada, who team up with mad scientists.', 2014, 102, 'Japan', 7.8, 0.0, 0, 'big_hero.jpg')
+INSERT INTO `movies` (`title`, `slug`, `summary`, `release_year`, `duration`, `country`, `imdb_rating`, `user_rating`, `review_count`, `cover`) VALUES
+('The Godfather', 'godfather', 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.', 1972, 175, 'USA', 9.2, 8.5, 2, 'godfather.jpg'),
+('The Shawshank Redemption', 'the-shawshank-redemption', 'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.', 1994, 142, 'USA', 9.3, 7.0, 1, 'shawshank.jpg'),
+('The Big Lebowski', 'the-big-lebowski', 'The Dude finds himself in the middle of a crooked police investigation.', 1998, 117, 'USA', 8.2, 0.0, 0, 'big_lebowski.jpg'),
+('Big Hero 6', 'big-hero-6', 'The special bond that develops between plus-sized inflatable robot Baymax, and prodigy Hiro Hamada, who team up with mad scientists.', 2014, 102, 'Japan', 7.8, 0.0, 0, 'big_hero.jpg')
 ;
 
 -- movie_genre
@@ -66,10 +66,10 @@ INSERT INTO `movie_production` (`movie_id`, `production_id`) VALUES
 ;
 
 -- series
-INSERT INTO `series` (`title`, `summary`, `release_year`, `duration`, `country`, `imdb_rating`, `user_rating`, `review_count`, `cover`) VALUES
-('The Big Bang Theory', 'A woman and her family are stuck in the time paradox.', 2007, 22, 'USA', 9.5, 8.5, 2, 'big_bang_theory.jpg'),
-('Game of Thrones', 'Nine noble families fight for control over the mythical lands of Westeros.', 2011, 57, 'USA', 9.3, 10.0, 1, 'game_of_thrones.jpg'),
-('House of Cards', 'An antisocial maverick doctor who specializes in cardiology.', 2013, 45, 'USA', 9.1, 0.0, 0, 'house_of_cards.jpg')
+INSERT INTO `series` (`title`, `slug`, `summary`, `release_year`, `duration`, `country`, `imdb_rating`, `user_rating`, `review_count`, `cover`) VALUES
+('The Big Bang Theory', 'the-big-bang-theory', 'A woman and her family are stuck in the time paradox.', 2007, 22, 'USA', 9.5, 8.5, 2, 'big_bang_theory.jpg'),
+('Game of Thrones', 'game-of-thrones', 'Nine noble families fight for control over the mythical lands of Westeros.', 2011, 57, 'USA', 9.3, 10.0, 1, 'game_of_thrones.jpg'),
+('House of Cards', 'house-of-cards', 'An antisocial maverick doctor who specializes in cardiology.', 2013, 45, 'USA', 9.1, 0.0, 0, 'house_of_cards.jpg')
 ;
 
 -- series_genre

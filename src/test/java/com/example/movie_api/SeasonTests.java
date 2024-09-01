@@ -56,7 +56,7 @@ class SeasonTests extends MovieApiApplicationTests {
     @DirtiesContext
     void updateSeason() {
         Season season = new Season(1, "Season 1", 2021, 8.5);
-        authRT("user").put("/seasons/1", season);
+        authRT("admin").put("/seasons/1", season);
         ResponseEntity<Season> response = authRT("user").getForEntity("/seasons/1", Season.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getSeason_number()).isEqualTo(season.getSeason_number());
@@ -71,7 +71,7 @@ class SeasonTests extends MovieApiApplicationTests {
         Series series = authRT("user").getForObject("/series/2", Series.class);
         Season season = new Season(1, "Season 1", 2021, 8.5);
         season.setSeries(series);
-        authRT("user").put("/seasons/2", season);
+        authRT("admin").put("/seasons/2", season);
         series = authRT("user").getForObject("/series/2", Series.class);
         season = authRT("user").getForObject("/seasons/2", Season.class);
         assertThat(series.getSeasons().size()).isEqualTo(1);
@@ -84,7 +84,7 @@ class SeasonTests extends MovieApiApplicationTests {
     @Test
     @DirtiesContext
     void deleteSeason() {
-        authRT("user").delete("/seasons/2");
+        authRT("admin").delete("/seasons/2");
         ResponseEntity<Season> response = authRT("user").getForEntity("/seasons/2", Season.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         Series series = authRT("user").getForObject("/series/3", Series.class);

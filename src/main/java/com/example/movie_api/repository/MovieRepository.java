@@ -12,4 +12,5 @@ import com.example.movie_api.model.Movie;
 public interface MovieRepository extends CrudRepository<Movie, Long>, PagingAndSortingRepository<Movie, Long> {
     Page<Movie> findAll(Pageable pageable);
     Iterable<Movie> findByTitleContaining(String title);
+    Movie findBySlug(String slug);
 }

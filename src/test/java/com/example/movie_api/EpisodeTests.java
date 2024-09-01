@@ -90,7 +90,7 @@ public class EpisodeTests extends MovieApiApplicationTests {
     @Test
     @DirtiesContext
     public void deleteEpisode() {
-        authRT("user").delete("/episodes/1");
+        authRT("admin").delete("/episodes/1");
         ResponseEntity<Episode> response = authRT("user").getForEntity("/episodes/1", Episode.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         Season season = authRT("user").getForObject("/seasons/2", Season.class);

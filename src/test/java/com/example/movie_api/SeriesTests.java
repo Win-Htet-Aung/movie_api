@@ -71,7 +71,7 @@ class SeriesTests extends MovieApiApplicationTests {
 	@DirtiesContext
 	void updateSeries() {
 		Series series = new Series("The Wire", "An American news satire and cable drama series.", 2002, 45, "USA", 9.0, "the_wire.jpg");
-		authRT("user").put("/series/1", series);
+		authRT("admin").put("/series/1", series);
 		Series updatedSeries = authRT("user").getForObject("/series/1", Series.class);
 		assertThat(updatedSeries.getTitle()).isEqualTo(series.getTitle());
 		assertThat(updatedSeries.getReleaseYear()).isEqualTo(series.getReleaseYear());
@@ -89,7 +89,7 @@ class SeriesTests extends MovieApiApplicationTests {
 		series.addGenre(genres[0]);
 		series.addCast(casts[0]);
 		series.addProduction(productions[0]);
-		authRT("user").put("/series/1", series);
+		authRT("admin").put("/series/1", series);
 		Series updatedSeries = authRT("user").getForObject("/series/1", Series.class);
 		assertThat(updatedSeries.getGenres().contains(genres[0])).isTrue();
 		assertThat(updatedSeries.getCasts().contains(casts[0])).isTrue();
@@ -97,7 +97,7 @@ class SeriesTests extends MovieApiApplicationTests {
 		updatedSeries.getGenres().clear();
 		updatedSeries.getCasts().clear();
 		updatedSeries.getProductions().clear();
-		authRT("user").put("/series/1", updatedSeries);
+		authRT("admin").put("/series/1", updatedSeries);
 		updatedSeries = authRT("user").getForObject("/series/1", Series.class);
 		assertThat(updatedSeries.getGenres().isEmpty()).isTrue();
 		assertThat(updatedSeries.getCasts().isEmpty()).isTrue();
@@ -107,7 +107,7 @@ class SeriesTests extends MovieApiApplicationTests {
 	@Test
 	@DirtiesContext
 	void deleteSeries() {
-		ResponseEntity<Void> deleteResponse = authRT("user").exchange("/series/1", HttpMethod.DELETE, null, Void.class);
+		ResponseEntity<Void> deleteResponse = authRT("admin").exchange("/series/1", HttpMethod.DELETE, null, Void.class);
 		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 		ResponseEntity<Series> response = authRT("user").getForEntity("/series/1", Series.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
@@ -121,7 +121,7 @@ class SeriesTests extends MovieApiApplicationTests {
 		Set<Cast> casts = series.getCasts();
 		Set<Production> productions = series.getProductions();
 		Set<Season> seasons = series.getSeasons();
-		authRT("user").delete("/series/3");
+		authRT("admin").delete("/series/3");
 		ResponseEntity<Series> response = authRT("user").getForEntity("/series/3", Series.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 		for (Genre genre : genres) {

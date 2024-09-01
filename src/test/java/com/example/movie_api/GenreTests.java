@@ -42,7 +42,7 @@ class GenreTests extends MovieApiApplicationTests {
 	void deleteGenre() {
 		ResponseEntity<Genre> response = authRT("user").getForEntity("/genres/1", Genre.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		ResponseEntity<Void> deleteResponse = authRT("user").exchange("/genres/1", HttpMethod.DELETE, null, Void.class);
+		ResponseEntity<Void> deleteResponse = authRT("admin").exchange("/genres/1", HttpMethod.DELETE, null, Void.class);
 		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 		response = authRT("user").getForEntity("/genres/1", Genre.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
@@ -52,7 +52,7 @@ class GenreTests extends MovieApiApplicationTests {
 	@DirtiesContext
 	void updateGenre() {
 		Genre genre = new Genre("Documentary");
-		authRT("user").put("/genres/1", genre);
+		authRT("admin").put("/genres/1", genre);
 		Genre updatedGenre = authRT("user").getForObject("/genres/1", Genre.class);
 		assertThat(updatedGenre.getName()).isEqualTo("Documentary");
 	}

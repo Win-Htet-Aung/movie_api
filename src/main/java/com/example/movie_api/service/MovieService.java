@@ -14,6 +14,7 @@ import com.example.movie_api.repository.MovieRepository;
 import com.example.movie_api.repository.ReviewRepository;
 import com.example.movie_api.repository.UserRepository;
 import com.example.movie_api.utils.SearchCriteria;
+import java.util.NoSuchElementException;
 
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.*;
@@ -40,17 +41,28 @@ public class MovieService {
         ));
     }
 
-    public Movie getMovie(Long movieId) {
-        return movieRepository.findById(movieId).get();
+    public String generateSlug(Movie movie) {
+        return movie.getTitle().replaceAll("\\s+", "-").toLowerCase() + "-" + movie.getReleaseYear();
+    }
+
+    public Movie getMovie(String slug) {
+        Movie movie;
+        movie = movieRepository.findBySlug(slug);
+        if (movie == null) {
+            throw new NoSuchElementException();
+        }
+        return movie;
     }
 
     public Movie createMovie(Movie newMovie) {
+        newMovie.setSlug(generateSlug(newMovie));
         return movieRepository.save(newMovie);
     }
 
-    public void updateMovie(Long movieId, Movie updatedMovie) {
-        Movie movie = getMovie(movieId);
+    public void updateMovie(String slug, Movie updatedMovie) {
+        Movie movie = getMovie(slug);
         updatedMovie.setId(movie.getId());
+        updatedMovie.setSlug(generateSlug(updatedMovie));
         movieRepository.save(updatedMovie);
     }
 
@@ -73,9 +85,9 @@ public class MovieService {
         return tq.getResultList();
     }
 
-    public Review createReview(Long movieId, Review newReview, String username) {
+    public Review createReview(String slug, Review newReview, String username) {
         User user = userRepository.findByUsername(username);
-        Movie movie = getMovie(movieId);
+        Movie movie = getMovie(slug);
         newReview.setUser(user);
         newReview.getMovies().add(movie);
         Review savedReview = reviewRepository.save(newReview);

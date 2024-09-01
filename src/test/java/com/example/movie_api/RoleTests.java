@@ -31,7 +31,7 @@ public class RoleTests extends MovieApiApplicationTests {
     @DirtiesContext
     public void createRole() {
         Role role = new Role("Director");
-        URI new_role_location = authRT("user").postForLocation("/roles", role);
+        URI new_role_location = authRT("admin").postForLocation("/roles", role);
         ResponseEntity<Role> response = authRT("user").getForEntity(new_role_location, Role.class);
         assertThat(response.getBody().getName()).isEqualTo("Director");
         assertThat(response.getBody().getUsers()).isEmpty();
@@ -41,12 +41,12 @@ public class RoleTests extends MovieApiApplicationTests {
     @DirtiesContext
     public void updateRole() {
         Role role = new Role("Director");
-        authRT("user").put("/roles/1", role);
-        ResponseEntity<Role> response = authRT("user").getForEntity("/roles/1", Role.class);
+        authRT("admin").put("/roles/2", role);
+        ResponseEntity<Role> response = authRT("user").getForEntity("/roles/2", Role.class);
         assertThat(response.getBody().getName()).isEqualTo("Director");
         assertThat(response.getBody().getUsers().size()).isEqualTo(1);
         role = new Role("Actor");
-        ResponseEntity<Void> nf_response = authRT("user").exchange("/roles/10", HttpMethod.PUT, new HttpEntity<>(role), Void.class);
+        ResponseEntity<Void> nf_response = authRT("admin").exchange("/roles/10", HttpMethod.PUT, new HttpEntity<>(role), Void.class);
         assertThat(nf_response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
@@ -55,14 +55,14 @@ public class RoleTests extends MovieApiApplicationTests {
     public void deleteRole() {
         Role role = authRT("user").getForObject("/roles/1", Role.class);
         Set<User> users = role.getUsers();
-        authRT("user").delete("/roles/1");
+        authRT("admin").delete("/roles/1");
         ResponseEntity<Role> response = authRT("user").getForEntity("/roles/1", Role.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         for (User user : users) {
             ResponseEntity<User> uResp = authRT("user").getForEntity("/users/" + user.getId(), User.class);
             assertThat(uResp.getStatusCode()).isEqualTo(HttpStatus.OK);
         }
-        authRT("user").delete("/roles/3");
+        authRT("admin").delete("/roles/3");
         response = authRT("user").getForEntity("/roles/3", Role.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }

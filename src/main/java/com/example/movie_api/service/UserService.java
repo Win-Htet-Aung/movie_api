@@ -37,9 +37,18 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void updateUser(Long id, User updateUser) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+    public void updateUser(Long id, User updateUser, String username) {
+        User loggedInUser = userRepository.findByUsername(username);
         User user = getUserById(id);
+        if (loggedInUser.getRole().getName().equals("admin")) {
+            if (user.getRole().getName().equals("admin") && loggedInUser.getId() != user.getId()) {
+                throw new SecurityException("Admin cannot update other admin");
+            }
+        } else if (loggedInUser.getId() != user.getId()) {
+            throw new SecurityException("User can only update own account");
+        }
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
         updateUser.setPassword("{bcrypt}" + encoder.encode(updateUser.getPassword()));
         if (updateUser.getRole() == null) {
             updateUser.setRole(user.getRole());
