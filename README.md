@@ -1,0 +1,1 @@
+![alt text]([http://url/to/img.png](https://media.licdn.com/dms/image/D5612AQEwmqJP-ghpHA/article-cover_image-shrink_720_1280/0/1704494078319?e=2147483647&v=beta&t=2q8F9hfFue0Ezdc9_AHXQJjucsG-qPn1kPTJiHJWfp8))
